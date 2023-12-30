@@ -1,0 +1,52 @@
+body {
+    background-color: #1c1c1f;
+}
+
+table {
+    max-width: 1000px;
+    --bs-table-bg: #31313b !important;
+    --bs-table-hover-bg: #28282F !important;   
+    color: #bbb !important;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.table-light {
+    --bs-table-bg: #28282F !important;
+    color: #bbb !important;
+}
+
+table th.hoverable:hover, .nowSort{
+    background-color: #373c7a !important;
+    cursor: pointer;
+}
+
+table {
+    text-align: center;
+}
+
+table td:nth-child(2) {
+    text-align: left;
+    color: #fff !important;
+}
+
+table th:nth-child(2) {
+    text-align: left;
+}
+
+.nav-link.active {
+    color: #444444 !important;
+    background-color: #eee !important;
+}
+
+.nav-link {
+    color: #ccc !important;
+}
+
+.navbar {
+    background-color: #373c7a !important;
+}
+
+.form-check-label {
+    color: #ccc;
+}

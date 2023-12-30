@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Champion Stats</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">LoL.Champs</a>
+      <div class="collapse navbar-collapse" id="lolNavItem">
+        <ul class="navbar-nav me-auto">
+          <li class="dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="dropdownSelect" role="button" data-bs-toggle="dropdown"
+              aria-expanded="false">
+              All
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <!-- Dropdown items -->
+              <li>
+                <a class="dropdown-item" href="#">
+                  All
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <img src="../images/rank/Rank=Bronze.png" alt="Rank" width="25" height="25">
+                  Bronze
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <img src="../images/rank/Rank=Silver.png" alt="Rank" width="25" height="25">
+                  Silver
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <img src="../images/rank/Rank=Gold.png" alt="Rank" width="25" height="25">
+                  Gold
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <img src="../images/rank/Rank=Platinum.png" alt="Rank" width="25" height="25">
+                  Platinum
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <img src="../images/rank/Rank=Diamond.png" alt="Rank" width="25" height="25">
+                  Diamond
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <img src="../images/rank/Rank=Emerald.png" alt="Rank" width="25" height="25">
+                  Emerald
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="#">
+                  <img src="../images/rank/Rank=Master.png" alt="Rank" width="25" height="25">
+                  Master
+                </a>
+              </li>
+              <!-- etc. -->
+            </ul>
+          </li>
+          <!-- More nav items -->
+          <ul class="nav nav-tabs ms-4" id="positionTab" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a class="nav-link active" id="all-tab" data-bs-toggle="tab" href="#top" role="tab" aria-controls="top"
+                aria-selected="true">
+                All
+                <svg height="25" width="25">
+                  <g fill="#7B7A8E" fill-rule="nonzero">
+                    <path
+                      d="M16.293 17.03c.362.628.147 1.43-.48 1.793-.629.364-1.431.149-1.794-.479l-2.144-3.717-2.144 3.717c-.363.628-1.165.843-1.793.48-.628-.363-.843-1.166-.48-1.793l2.144-3.718h-4.29c-.724 0-1.312-.587-1.312-1.312 0-.727.588-1.314 1.313-1.314h4.289L7.457 6.969c-.362-.627-.147-1.43.48-1.792.629-.364 1.431-.149 1.794.479l2.144 3.717 2.144-3.717c.363-.628 1.165-.843 1.793-.48.628.363.843 1.166.48 1.793l-2.144 3.718h4.29c.725 0 1.312.587 1.312 1.312 0 .727-.587 1.314-1.312 1.314h-4.29l2.145 3.718z"
+                      transform="translate(-2388.000000, -699.000000) translate(2388.000000, 699.000000)"></path>
+                  </g>
+                </svg>
+              </a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="top-tab" data-bs-toggle="tab" href="#top" role="tab" aria-controls="top"
+                aria-selected="false">
+                Top
+                <img src="../images/position/top.svg" alt="Top" width="25" height="25">
+              </a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="jungle-tab" data-bs-toggle="tab" href="#jungle" role="tab" aria-controls="jungle"
+                aria-selected="false">
+                Jungle
+                <img src="../images/position/jungle.svg" alt="Jungle" width="25" height="25">
+              </a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="mid-tab" data-bs-toggle="tab" href="#mid" role="tab" aria-controls="mid"
+                aria-selected="false">
+                Middle
+                <img src="../images/position/mid.svg" alt="Mid" width="25" height="25">
+              </a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="adc-tab" data-bs-toggle="tab" href="#adc" role="tab" aria-controls="adc"
+                aria-selected="false">
+                Bottom
+                <img src="../images/position/adc.svg" alt="ADC" width="25" height="25">
+              </a>
+            </li>
+            <li class="nav-item" role="presentation">
+              <a class="nav-link" id="support-tab" data-bs-toggle="tab" href="#support" role="tab"
+                aria-controls="support" aria-selected="false">
+                Support
+                <img src="../images/position/support.svg" alt="Support" width="25" height="25">
+              </a>
+            </li>
+          </ul>
+
+          <div class="form-check form-switch m-auto ms-5">
+            <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault">
+            <label class="form-check-label" for="flexSwitchCheckDefault">Table / Bubble Chart</label>
+          </div>
+
+        </ul>
+      </div>
+  </nav>
+
+  <!-- Content would go here -->
+  <div class="container mt-3 table-container">
+    <!-- Your content here -->
+    <table class="table table-dark table-hover m-auto align-middle" id="champions-table">
+      <thead class="table-light">
+        <th scope="col">#</th>
+        <th scope="col">Champion</th>
+        <th scope="col" class="hoverable" id="tier-th">Tier</th>
+        <th scope="col">Position</th>
+        <th scope="col" class="hoverable" id="wr-th">Win Rate</th>
+        <th scope="col" class="hoverable" id="pr-th">Pick Rate</th>
+        <th scope="col" class="hoverable" id="br-th">Ban Rate</th>
+      </thead>
+    </table>
+  </div>
+
+  <!-- Bootstrap Bundle with Popper -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="main.js"></script>
+
+</body>
+
+</html>
