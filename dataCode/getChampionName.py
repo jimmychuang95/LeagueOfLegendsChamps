@@ -1,7 +1,7 @@
 import pandas as pd
 
 # 读取 CSV 文件
-csv_file = './data/champions/all.csv'  # 替换为您的 CSV 文件路径
+csv_file = '../data/champions/all.csv'  # 替换为您的 CSV 文件路径
 df = pd.read_csv(csv_file)
 
 # 检查 DataFrame 是否有足够的列

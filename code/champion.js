@@ -9,7 +9,7 @@ console.log(name, tier, winRate, pickRate, banRate);
 
 var cleannedName = name.replace(/[\s.'"]/g, "");
 switch (cleannedName) {
-    case ("RenataGlasc"): cleannedName = "Renekton";
+    case ("RenataGlasc"): cleannedName = "Renata";
     case ("Nunu&Willump"): cleannedName = "Nunu";
     case ("Wukong"): cleannedName = "MonkeyKing";
 }
@@ -47,6 +47,14 @@ d3.select(".tier-banner")
 d3.select(".champion-name-info").text(name);
 
 d3.select(".tier-info").text("Tier " + tier);
+
+d3.select(".skill-info-p")
+    .append("img")
+    .attr("src", `../images/passive/${cleannedName}P.png`)
+    .attr("class", "skill-image me-2 rounded")
+    .attr("alt", `${name} P skill image`)
+    .attr("width", "33px")
+    .attr("height", "33px")
 
 d3.select(".skill-info-q")
     .append("img")
