@@ -144,13 +144,18 @@ function displayBubbleChart(position, rank, sortWith) {
                 maxRadius = 20;
                 break;
             case "pickRate":
-                minRadius = 5;
+                minRadius = 10;
                 maxRadius = 35;
                 break;
             case "banRate":
-                minRadius = 5;
-                maxRadius = 35;
+                minRadius = 10;
+                maxRadius = 45;
                 break;
+        }
+
+        if (position != "ALL") {
+            minRadius = minRadius * 1.4;
+            maxRadius = maxRadius * 1.4;
         }
 
         const tooltip = d3.select(".tooltip");
@@ -196,11 +201,11 @@ function displayBubbleChart(position, rank, sortWith) {
 
         simulation.on("tick", () => {
             ticked();
-            //boundingBoxForce();
+            boundingBoxForce();
         });
 
         function ticked() {
-            const minShowRadius = 6;
+            const minShowRadius = 7;
             const bubbles = svg.selectAll(".bubble")
                 .data(data)
                 .join("circle")
@@ -257,12 +262,21 @@ function displayBubbleChart(position, rank, sortWith) {
             // Update the position for the current data point
             event.subject.fx = newX;
             event.subject.fy = newY;
+
+            tooltip.style("opacity", 0);
         }
 
         function dragended(event) {
             if (!event.active) simulation.alphaTarget(0);
             event.subject.fx = null;
             event.subject.fy = null;
+        }
+
+        function boundingBoxForce() {
+            for (let node of simulation.nodes()) {
+                node.x = Math.max(radiusScale(node[sortWith]), Math.min(width - radiusScale(node[sortWith]), node.x));
+                node.y = Math.max(radiusScale(node[sortWith]), Math.min(height - radiusScale(node[sortWith]), node.y));
+            }
         }
 
     });
