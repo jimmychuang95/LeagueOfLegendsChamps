@@ -269,24 +269,26 @@ function displayBubbleChart(position, rank, sortWith) {
 }
 
 d3.selectAll("#champions-table .hoverable").on("click", function () {
+    var rank = d3.select("#dropdownSelect").text().replace(/(\r\n|\n|\r|\s)/gm, "").toLowerCase();
+    var position = d3.select(".nav-link.active").text().replace(/(\r\n|\n|\r|\s)/gm, "").toUpperCase();
     if (d3.select(this).attr("id") === "tier-th") {
         nowSort = "tier";
-        displayAllInfo("ALL", "all", "tier");
+        displayAllInfo(position, rank, "tier");
         d3.selectAll(".nowSort").classed("nowSort", false);
         d3.select(this).classed("nowSort", true);
     } else if (d3.select(this).attr("id") === "wr-th") {
         nowSort = "winRate";
-        displayAllInfo("ALL", "all", "winRate");
+        displayAllInfo(position, rank, "tier");
         d3.selectAll(".nowSort").classed("nowSort", false);
         d3.select(this).classed("nowSort", true);
     } else if (d3.select(this).attr("id") === "pr-th") {
         nowSort = "pickRate";
-        displayAllInfo("ALL", "all", "pickRate");
+        displayAllInfo(position, rank, "tier");
         d3.selectAll(".nowSort").classed("nowSort", false);
         d3.select(this).classed("nowSort", true);
     } else if (d3.select(this).attr("id") === "br-th") {
         nowSort = "banRate";
-        displayAllInfo("ALL", "all", "banRate");
+        displayAllInfo(position, rank, "tier");
         d3.selectAll(".nowSort").classed("nowSort", false);
         d3.select(this).classed("nowSort", true);
     }
