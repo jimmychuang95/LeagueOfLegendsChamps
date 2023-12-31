@@ -62,7 +62,10 @@ function displayChampions(position, rank, sortWith) {
         var rows = tbody.selectAll("tr")
             .data(data)
             .enter()
-            .append("tr");
+            .append("tr")
+            .on("click", function (event, d) {
+                window.open("champion.html?name=" + encodeURIComponent(d.name) + "&tier=" + encodeURIComponent(d.tier) + "&winRate=" + encodeURIComponent(d.winRate) + "&pickRate=" + encodeURIComponent(d.pickRate) + "&banRate=" + encodeURIComponent(d.banRate), "_self");
+            });
 
         var cells = rows.selectAll("td")
             .data(function (row, i) {
@@ -165,8 +168,6 @@ function displayBubbleChart(position, rank, sortWith) {
             .domain((sortWith == "tier") ? [d3.max(data, d => d[sortWith]), d3.min(data, d => d[sortWith])] : [d3.min(data, d => d[sortWith]), d3.max(data, d => d[sortWith])]) //0: OP, 5: Bad
             .range([minRadius, maxRadius]);
 
-        console.log(radiusScale.domain());
-
         const svg = d3.select("#bubble-chart-container").append("svg")
             .attr("width", width)
             .attr("height", height)
@@ -237,6 +238,9 @@ function displayBubbleChart(position, rank, sortWith) {
                         .style("top", (event.pageY - 28) + "px");
                 })
                 .on("mouseout", () => tooltip.style("opacity", 0))
+                .on("click", function (event, d) {
+                    window.open("champion.html?name=" + encodeURIComponent(d.name), "_self");
+                })
                 .call(d3.drag()
                     .on("start", dragstarted)
                     .on("drag", dragged)

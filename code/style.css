@@ -25,6 +25,10 @@ table {
     text-align: center;
 }
 
+table td:hover, .bubble:hover{
+    cursor: pointer;
+}
+
 table td:nth-child(2) {
     text-align: left;
     color: #fff !important;
@@ -66,4 +70,44 @@ table th:nth-child(2) {
     border-radius: 8px;
     pointer-events: none;
     opacity: 0;
+}
+
+
+
+/* champion.html */
+
+.top-row {
+    background-color: #31313B;
+}
+
+.champion-image {
+    border-radius: 10px;
+}
+
+.tier-banner {
+    right: 10px;
+    bottom: 0;
+}
+
+h1 {
+    color: #fff;
+    font-size: 30px;
+}
+
+.tier-info {
+    color: #888;
+}
+
+.skill-text {
+    width: 13px;
+    height: 13px;
+    font-size: 10px;
+    font-weight: bold;
+    background-color: #28282F;
+    right: 8px;
+    bottom: 0;
+    border-radius: 3px;
+    display: flex; 
+    align-items: center;
+    justify-content: center;
 }

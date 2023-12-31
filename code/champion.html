@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Champion Stats</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="index.html">LoL.Champs</a>
+    </div>
+  </nav>
+
+  <div class="container-fluid mt-3">
+    <div class="row justify-content-center top-row py-4">
+      <div class="col-8">
+        <div class="row">
+          <div class="col-2 image-box text-end position-relative">
+            <div class="tier-banner position-absolute"></div>
+          </div>
+          <div class="col-6 info-box">
+            <h1 class="champion-name-info mb-0 mt-1"></h1>
+            <div class="skill-info mt-2">
+              <span class="skill-info-q position-relative d-inline-block">
+                <div class="skill-text position-absolute" style="color: rgb(255, 195, 6);">Q</div>
+              </span>
+              <span class="skill-info-w position-relative d-inline-block">
+                <div class="skill-text position-absolute" style="color: rgb(81, 185, 237);">W</div>
+              </span>
+              <span class="skill-info-e position-relative d-inline-block">
+                <div class="skill-text position-absolute" style="color: rgb(98, 217, 121)">E</div>
+              </span>
+              <span class="skill-info-r position-relative d-inline-block">
+                <div class="skill-text position-absolute" style="color: rgb(255, 37, 118);">R</div>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row justify-content-center">
+      <div class="col-8">
+        <div class="row">
+          <div class="col-4 perk-div">a</div>
+          <div class="col-4 summoner-div">b</div>
+          <div class="col-4 skill-div">c</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="champion.js"></script>
+</body>
