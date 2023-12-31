@@ -136,20 +136,26 @@
       </div>
   </nav>
 
-  <!-- Content would go here -->
-  <div class="container mt-3 table-container">
-    <!-- Your content here -->
-    <table class="table table-dark table-hover m-auto align-middle" id="champions-table">
-      <thead class="table-light">
-        <th scope="col">#</th>
-        <th scope="col">Champion</th>
-        <th scope="col" class="hoverable" id="tier-th">Tier</th>
-        <th scope="col">Position</th>
-        <th scope="col" class="hoverable" id="wr-th">Win Rate</th>
-        <th scope="col" class="hoverable" id="pr-th">Pick Rate</th>
-        <th scope="col" class="hoverable" id="br-th">Ban Rate</th>
-      </thead>
-    </table>
+  <div class="tooltip"></div>
+  <div class="container mt-3">
+    <div class="row">
+      <div class="col-8">
+        <table class="table table-dark table-hover m-auto align-middle" id="champions-table">
+          <thead class="table-light">
+            <th scope="col">#</th>
+            <th scope="col">Champion</th>
+            <th scope="col" class="hoverable" id="tier-th">Tier</th>
+            <th scope="col">Position</th>
+            <th scope="col" class="hoverable" id="wr-th">Win Rate</th>
+            <th scope="col" class="hoverable" id="pr-th">Pick Rate</th>
+            <th scope="col" class="hoverable" id="br-th">Ban Rate</th>
+          </thead>
+        </table>
+      </div>
+      <div class="col-4" id="bubble-chart-container">
+
+      </div>
+    </div>
   </div>
 
   <!-- Bootstrap Bundle with Popper -->

@@ -3,7 +3,7 @@ body {
 }
 
 table {
-    max-width: 1000px;
+    max-width: 750px;
     --bs-table-bg: #31313b !important;
     --bs-table-hover-bg: #28282F !important;   
     color: #bbb !important;
@@ -49,4 +49,21 @@ table th:nth-child(2) {
 
 .form-check-label {
     color: #ccc;
+}
+
+#bubble-chart-svg {
+    background-color: #31313b;
+    border : 1px solid #ccc;
+}
+
+.tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 4px;
+    font: 12px sans-serif;
+    background: lightsteelblue;
+    border: 0px;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
 }
