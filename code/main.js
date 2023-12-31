@@ -278,17 +278,17 @@ d3.selectAll("#champions-table .hoverable").on("click", function () {
         d3.select(this).classed("nowSort", true);
     } else if (d3.select(this).attr("id") === "wr-th") {
         nowSort = "winRate";
-        displayAllInfo(position, rank, "tier");
+        displayAllInfo(position, rank, "winRate");
         d3.selectAll(".nowSort").classed("nowSort", false);
         d3.select(this).classed("nowSort", true);
     } else if (d3.select(this).attr("id") === "pr-th") {
         nowSort = "pickRate";
-        displayAllInfo(position, rank, "tier");
+        displayAllInfo(position, rank, "pickRate");
         d3.selectAll(".nowSort").classed("nowSort", false);
         d3.select(this).classed("nowSort", true);
     } else if (d3.select(this).attr("id") === "br-th") {
         nowSort = "banRate";
-        displayAllInfo(position, rank, "tier");
+        displayAllInfo(position, rank, "banRate");
         d3.selectAll(".nowSort").classed("nowSort", false);
         d3.select(this).classed("nowSort", true);
     }
