@@ -80,6 +80,12 @@ table th:nth-child(2) {
     background-color: #31313B;
 }
 
+.image-box {
+    flex: 0 0 auto;
+    width: 114px;
+    height: 100%;
+}
+
 .champion-image {
     border-radius: 10px;
 }
@@ -110,4 +116,41 @@ h1 {
     display: flex; 
     align-items: center;
     justify-content: center;
+}
+
+.skill-tooltip {
+    max-width: 300px;
+    position: absolute;
+    text-align: left;
+    padding: 10px;
+    font: 12px sans-serif;
+    color: #fff;
+    background: #28282F;
+    border: 1px solid #555;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+}
+
+.skill-tooltip div strong {
+    font-size: 15px;
+}
+
+.rate-box {
+    padding-left: 13px !important;
+    flex: 0 0 auto;
+    width: 130px;
+    height: 100%;
+    border-left: 5px solid;
+}
+
+.rate-text-title {
+    color: #888;
+    font-size: 13px;
+}
+
+.win-rate-text-span, .pick-rate-text-span, .ban-rate-text-span {
+    font-size: 20px;
+    color: #fff;
+    
 }

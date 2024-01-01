@@ -23,7 +23,7 @@
     <div class="row justify-content-center top-row py-4">
       <div class="col-8">
         <div class="row">
-          <div class="col-2 image-box text-end position-relative">
+          <div class="image-box text-start position-relative">
             <div class="tier-banner position-absolute"></div>
           </div>
           <div class="col-6 info-box">
@@ -42,8 +42,28 @@
                 <div class="skill-text position-absolute" style="color: rgb(98, 217, 121)">E</div>
               </span>
               <span class="skill-info-r position-relative d-inline-block">
-                <div class="skill-text position-absolute" style="color: rgb(255, 37, 118);">R</div>
+                <div class="skill-text position-absolute" style="color: rgb(194, 39, 96);">R</div>
               </span>
+            </div>
+          </div>
+        </div>
+        <div class="row mt-4" style="padding-left: 13px;">
+          <div class="rate-box win-rate-bar">
+            <div class="win-rate-text">
+              <div class="rate-text-title">Win Rate</div>
+              <div class="win-rate-text-span"><strong></strong></div>
+            </div>
+          </div>
+          <div class="rate-box pick-rate-bar">
+            <div class="pick-rate-text">
+              <div class="rate-text-title">Pick Rate</div>
+              <span class="pick-rate-text-span"><strong></strong></span>
+            </div>
+          </div>
+          <div class="rate-box ban-rate-bar">
+            <div class="ban-rate-text">
+              <div class="rate-text-title">Ban Rate</div>
+              <div class="ban-rate-text-span"><strong></strong></div>
             </div>
           </div>
         </div>
@@ -59,6 +79,8 @@
       </div>
     </div>
   </div>
+
+  <div class="skill-tooltip"></div>
 
 
   <script src="https://d3js.org/d3.v7.min.js"></script>
