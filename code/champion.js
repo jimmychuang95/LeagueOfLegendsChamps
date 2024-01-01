@@ -1,11 +1,10 @@
 const params = new URLSearchParams(window.location.search);
 const name = params.get("name");
 const tier = params.get("tier");
-const winRate = params.get("winRate");
-const pickRate = params.get("pickRate");
-const banRate = params.get("banRate");
-
-console.log(name, tier, winRate, pickRate, banRate);
+var winRate
+var pickRate
+var banRate
+var nowRank = params.get("rank");
 
 var cleannedName = name.replace(/[\s.'"]/g, "");
 switch (cleannedName) {
@@ -15,6 +14,36 @@ switch (cleannedName) {
 }
 var lowerName = cleannedName.toLowerCase();
 
+var dropdown = d3.select("#dropdownSelect");
+dropdown.html("");
+if (nowRank != "all") {
+    dropdown.append("img")
+        .attr("src", "../images/rank/Rank=" + nowRank + ".png")
+        .attr("alt", "Rank")
+        .attr("width", "25")
+        .attr("height", "25")
+        .attr("class", "me-1");
+}
+dropdown.append("span").text((nowRank == "all") ? "All" : nowRank);
+
+d3.selectAll(".dropdown-item").on("click", function () {
+
+    var rank = d3.select(this).text().replace(/(\r\n|\n|\r|\s)/gm, "");
+    nowRank = rank;
+    displayRate();
+    
+    dropdown = d3.select("#dropdownSelect");
+    dropdown.html("");
+    if (rank != "All") {
+        dropdown.append("img")
+            .attr("src", "../images/rank/Rank=" + rank + ".png")
+            .attr("alt", "Rank")
+            .attr("width", "25")
+            .attr("height", "25")
+            .attr("class", "me-1");
+    }
+    dropdown.append("span").text(rank);
+});
 
 d3.select(".image-box")
     .append("img")
@@ -26,8 +55,8 @@ d3.select(".image-box")
 
 d3.select(".tier-banner")
     .append("svg")
-    .attr("width", "26px")
-    .attr("height", "26px")
+    .attr("width", "24px")
+    .attr("height", "24px")
     .html(function (d) {
         if (tier === "0") {
             return '<g fill="none"><path fill="#E84057" d="M2 0L22 0 22 18.056 12 23 2 18.056z"/><path fill="#FFF" d="M6.666 15l-1.274-1.274V6.614L6.666 5.34h3.598l1.274 1.274v7.112L10.264 15H6.666zm1.12-1.54H9.13l.462-.462V7.342L9.13 6.88H7.786l-.462.462v5.656l.462.462zM12.854 15V5.34h4.802l1.26 1.274v3.654l-1.26 1.274H14.8V15h-1.946zm1.946-4.914h1.75l.42-.434V7.23l-.42-.434H14.8v3.29z"/></g>'
@@ -52,7 +81,7 @@ d3.select(".skill-info-p")
     .append("img")
     .attr("src", `../images/passive/${cleannedName}P.png`)
     .attr("class", "skill-image me-2 rounded")
-    .attr("alt", `${name}P`)
+    .attr("alt", `${cleannedName}P`)
     .attr("width", "33px")
     .attr("height", "33px")
 
@@ -60,7 +89,7 @@ d3.select(".skill-info-q")
     .append("img")
     .attr("src", `../images/spell/${cleannedName}Q.png`)
     .attr("class", "skill-image me-2 rounded")
-    .attr("alt", `${name}Q`)
+    .attr("alt", `${cleannedName}Q`)
     .attr("width", "33px")
     .attr("height", "33px")
 
@@ -68,7 +97,7 @@ d3.select(".skill-info-w")
     .append("img")
     .attr("src", `../images/spell/${cleannedName}W.png`)
     .attr("class", "skill-image me-2 rounded")
-    .attr("alt", `${name}W`)
+    .attr("alt", `${cleannedName}W`)
     .attr("width", "33px")
     .attr("height", "33px")
 
@@ -76,7 +105,7 @@ d3.select(".skill-info-e")
     .append("img")
     .attr("src", `../images/spell/${cleannedName}E.png`)
     .attr("class", "skill-image me-2 rounded")
-    .attr("alt", `${name}E`)
+    .attr("alt", `${cleannedName}E`)
     .attr("width", "33px")
     .attr("height", "33px")
 
@@ -84,7 +113,7 @@ d3.select(".skill-info-r")
     .append("img")
     .attr("src", `../images/spell/${cleannedName}R.png`)
     .attr("class", "skill-image me-2 rounded")
-    .attr("alt", `${name}R`)
+    .attr("alt", `${cleannedName}R`)
     .attr("width", "33px")
     .attr("height", "33px")
 
@@ -92,18 +121,20 @@ d3.select(".skill-info-r")
 const skillTooltip = d3.select(".skill-tooltip");
 
 d3.csv("../data/champion_abilities.csv").then(function (data) {
+    data = data.map(function (d) {
+        d.Champion = d.Champion.toLowerCase();
+        return d;
+    });
     const abilities = data;
-    console.log(abilities);
 
     d3.selectAll(".skill-image")
         .on("mouseover", function (event, d) {
             const ability = abilities.filter(function (d) {
-                return d.Champion == name;
+                return d.Champion == lowerName;
             });
-            console.log(ability);
 
-            const hoverAbility = this.alt.split(name)[1];
-            console.log(ability[0]);
+            const hoverAbility = this.alt.split(cleannedName)[1];
+            console.log(this.alt);
 
             skillTooltip.style("opacity", 1)
                 .style("left", event.pageX + "px")
@@ -118,14 +149,33 @@ d3.csv("../data/champion_abilities.csv").then(function (data) {
         });
 });
 
-d3.select(".win-rate-text-span").select("strong").text(winRate + "%");
-d3.select(".pick-rate-text-span").select("strong").text(pickRate + "%");
-d3.select(".ban-rate-text-span").select("strong").text(banRate + "%");
+function displayRate() {
 
-var winRateGradient = 100 - winRate;
-var pickRateGradient = 100 - pickRate;
-var banRateGradient = 100 - banRate;
+    d3.csv("../data/champions/" + nowRank + ".csv").then(function (data) {
 
-d3.select(".win-rate-bar").attr("style", "border-image: linear-gradient(to bottom, #28282F " + winRateGradient + "%, #62d979 " + winRateGradient + "%) 1;")
-d3.select(".pick-rate-bar").attr("style", "border-image: linear-gradient(to bottom, #28282F " + pickRateGradient + "%, #51b9ed " + pickRateGradient + "%) 1;")
-d3.select(".ban-rate-bar").attr("style", "border-image: linear-gradient(to bottom, #28282F " + banRateGradient + "%, #c22760 " + banRateGradient + "%) 1;")
+        data = data.filter(function (d) {
+            return d.name == name;
+        });
+        data.sort(function (a, b) {
+            return b.pickRate - a.pickRate;
+        });
+        winRate = data[0].winRate;
+        pickRate = data[0].pickRate;
+        banRate = data[0].banRate;
+
+        d3.select(".win-rate-text-span").select("strong").text(winRate + "%");
+        d3.select(".pick-rate-text-span").select("strong").text(pickRate + "%");
+        d3.select(".ban-rate-text-span").select("strong").text(banRate + "%");
+
+        var winRateGradient = 100 - winRate;
+        var pickRateGradient = 100 - pickRate;
+        var banRateGradient = 100 - banRate;
+
+        d3.select(".win-rate-bar").attr("style", "border-image: linear-gradient(to bottom, #28282F " + winRateGradient + "%, #62d979 " + winRateGradient + "%) 1;")
+        d3.select(".pick-rate-bar").attr("style", "border-image: linear-gradient(to bottom, #28282F " + pickRateGradient + "%, #51b9ed " + pickRateGradient + "%) 1;")
+        d3.select(".ban-rate-bar").attr("style", "border-image: linear-gradient(to bottom, #28282F " + banRateGradient + "%, #c22760 " + banRateGradient + "%) 1;")
+
+    });
+}
+
+displayRate();

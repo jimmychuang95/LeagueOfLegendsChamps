@@ -64,7 +64,7 @@ function displayChampions(position, rank, sortWith) {
             .enter()
             .append("tr")
             .on("click", function (event, d) {
-                window.open("champion.html?name=" + encodeURIComponent(d.name) + "&tier=" + encodeURIComponent(d.tier) + "&winRate=" + encodeURIComponent(d.winRate) + "&pickRate=" + encodeURIComponent(d.pickRate) + "&banRate=" + encodeURIComponent(d.banRate), "_self");
+                window.open("champion.html?name=" + encodeURIComponent(d.name) + "&tier=" + encodeURIComponent(d.tier) + "&rank=" + encodeURIComponent(rank), "_self");
             });
 
         var cells = rows.selectAll("td")
@@ -239,7 +239,8 @@ function displayBubbleChart(position, rank, sortWith) {
                 })
                 .on("mouseout", () => tooltip.style("opacity", 0))
                 .on("click", function (event, d) {
-                    window.open("champion.html?name=" + encodeURIComponent(d.name) + "&tier=" + encodeURIComponent(d.tier) + "&winRate=" + encodeURIComponent(d.winRate) + "&pickRate=" + encodeURIComponent(d.pickRate) + "&banRate=" + encodeURIComponent(d.banRate), "_self");
+                    rank = d3.select("#dropdownSelect").text().replace(/(\r\n|\n|\r|\s)/gm, "").toLowerCase();
+                    window.open("champion.html?name=" + encodeURIComponent(d.name) + "&tier=" + encodeURIComponent(d.tier) + "&rank=" + encodeURIComponent(rank), "_self");
                 })
                 .call(d3.drag()
                     .on("start", dragstarted)
