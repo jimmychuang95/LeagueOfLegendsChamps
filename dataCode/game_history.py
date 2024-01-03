@@ -71,6 +71,9 @@ for summoner_team, summoner_position, summoner_champion, summoner_winFlag, oppon
 
 
 
-output_file_path = 'champion_win_rate.csv'  # 您可以更改路径和文件名
-mid_champion_win_rate_df.to_csv(output_file_path, index=True)
+top_champion_win_rate_df.to_csv("../data/summoner_win_pick/top_champion_win_pick.json", index=True)
+jungle_champion_win_rate_df.to_csv("../data/summoner_win_pick/jungle_champion_win_pick.json", index=True)
+mid_champion_win_rate_df.to_csv("../data/summoner_win_pick/mid_champion_win_pick.json", index=True)
+adc_champion_win_rate_df.to_csv("../data/summoner_win_pick/adc_champion_win_pick.json", index=True)
+support_champion_win_rate_df.to_csv("../data/summoner_win_pick/support_champion_win_pick.json", index=True)
 
