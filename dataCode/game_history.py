@@ -1,6 +1,9 @@
 import pandas as pd
 import json
 
+#NOTE: change summoner_name_for_save_path to your summoner name
+summoner_name_for_save_path = "Zeus"
+
 champion_file_path = "../data/champions/champions.json"
 with open(champion_file_path, 'r') as file:
     champion_file = json.load(file)
@@ -9,7 +12,6 @@ champions_name = []
 for champion_info in champion_file['data'].items():
     champion_id = champion_info[1]['id']
     champions_name.append(champion_id.lower())
-
 
 champion_win_rate_df = pd.DataFrame(index=champions_name, columns=["total"]+champions_name)
 
@@ -28,7 +30,7 @@ support_champion_win_rate_df = support_champion_win_rate_df.applymap(lambda x: [
 
 top_game_num, jungle_game_num, mid_game_num, adc_game_num, support_game_num = 0, 0, 0, 0, 0
 
-game_history_file_path = "../data/game_history/classic_game_history.csv"
+game_history_file_path = "../data/"+ summoner_name_for_save_path +"game_history/classic_game_history.csv"
 game_history_file_df = pd.read_csv(game_history_file_path)
 
 summoner_teams = game_history_file_df['summoner_team'].to_list()
@@ -84,8 +86,8 @@ mid_champion_win_rate_df = remove_spec_row_col(mid_champion_win_rate_df, [0,0,0,
 adc_champion_win_rate_df = remove_spec_row_col(adc_champion_win_rate_df, [0,0,0,0])
 support_champion_win_rate_df = remove_spec_row_col(support_champion_win_rate_df, [0,0,0,0])
 
-top_champion_win_rate_df.to_csv("../data/summoner_win_pick/top_champion_win_pick.csv", index=True)
-jungle_champion_win_rate_df.to_csv("../data/summoner_win_pick/jungle_champion_win_pick.csv", index=True)
-mid_champion_win_rate_df.to_csv("../data/summoner_win_pick/mid_champion_win_pick.csv", index=True)
-adc_champion_win_rate_df.to_csv("../data/summoner_win_pick/adc_champion_win_pick.csv", index=True)
-support_champion_win_rate_df.to_csv("../data/summoner_win_pick/support_champion_win_pick.csv", index=True)
+top_champion_win_rate_df.to_csv("../data/"+ summoner_name_for_save_path +"summoner_win_pick/top_champion_win_pick.csv", index=True)
+jungle_champion_win_rate_df.to_csv("../data/"+ summoner_name_for_save_path +"summoner_win_pick/jungle_champion_win_pick.csv", index=True)
+mid_champion_win_rate_df.to_csv("../data/"+ summoner_name_for_save_path +"summoner_win_pick/mid_champion_win_pick.csv", index=True)
+adc_champion_win_rate_df.to_csv("../data/"+ summoner_name_for_save_path +"summoner_win_pick/adc_champion_win_pick.csv", index=True)
+support_champion_win_rate_df.to_csv("../data/"+ summoner_name_for_save_path +"summoner_win_pick/support_champion_win_pick.csv", index=True)
