@@ -1,3 +1,4 @@
+// 全域變數
 const params = new URLSearchParams(window.location.search);
 const name = params.get("name");
 const tier = params.get("tier");
@@ -6,6 +7,7 @@ var pickRate
 var banRate
 var nowRank = params.get("rank");
 
+// 處理名字
 var cleannedName = name.replace(/[\s.'"]/g, "");
 switch (cleannedName) {
     case ("RenataGlasc"): cleannedName = "Renata";
@@ -14,6 +16,7 @@ switch (cleannedName) {
 }
 var lowerName = cleannedName.toLowerCase();
 
+// Rank dropdown
 var dropdown = d3.select("#dropdownSelect");
 dropdown.html("");
 if (nowRank != "all") {
@@ -45,6 +48,8 @@ d3.selectAll(".dropdown-item").on("click", function () {
     dropdown.append("span").text(rank);
 });
 
+
+// 載入英雄圖片
 d3.select(".image-box")
     .append("img")
     .attr("src", `../images/champion/${cleannedName}.png`)
@@ -53,6 +58,7 @@ d3.select(".image-box")
     .attr("width", "90px")
     .attr("height", "90px");
 
+// 載入英雄tier banner
 d3.select(".tier-banner")
     .append("svg")
     .attr("width", "24px")
@@ -73,10 +79,10 @@ d3.select(".tier-banner")
         }
     })
 
+// 載入英雄名字
 d3.select(".champion-name-info").text(name);
 
-d3.select(".tier-info").text("Tier " + tier);
-
+// 載入英雄技能
 d3.select(".skill-info-p")
     .append("img")
     .attr("src", `../images/passive/${cleannedName}P.png`)
@@ -117,7 +123,7 @@ d3.select(".skill-info-r")
     .attr("width", "33px")
     .attr("height", "33px")
 
-
+// 載入英雄技能說明
 const skillTooltip = d3.select(".skill-tooltip");
 
 d3.csv("../data/champion_abilities.csv").then(function (data) {
@@ -149,6 +155,7 @@ d3.csv("../data/champion_abilities.csv").then(function (data) {
         });
 });
 
+// 載入勝率、選率、禁用率
 function displayRate() {
 
     d3.csv("../data/champions/" + nowRank + ".csv").then(function (data) {
