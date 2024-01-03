@@ -191,5 +191,5 @@ driver.quit()
 
 df1 = pd.DataFrame(data=[championName, mainRunes, secondaryRunes, stats, starterItems, starterItemsNum, boots, bootsNum, CoreItems, CoreItemsNum], index=['championName', 'mainRunes', 'secondaryRunes', 'stats', 'starterItems', 'starterItemsNum', 'boots', 'bootsNum', 'CoreItems', 'CoreItemsNum'])
 df2 = pd.DataFrame(df1.values.T, columns=df1.index)
-df2.to_csv('../data/rune2.csv', encoding='utf-8')
+df2.to_csv('../data/rune3.csv', encoding='utf-8')
 

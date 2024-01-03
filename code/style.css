@@ -80,6 +80,11 @@ table th:nth-child(2) {
     background-color: #31313B;
 }
 
+.card-col {
+    background-color: #31313B;
+    border-radius: 15px;
+}
+
 .image-box {
     flex: 0 0 auto;
     width: 114px;
@@ -100,6 +105,15 @@ h1 {
     font-size: 30px;
 }
 
+h5 {
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    border-bottom: solid 1px #555;
+    padding-bottom: 6px;
+    margin-bottom: 20px;
+}
+
 .tier-info {
     color: #888;
 }
@@ -118,7 +132,7 @@ h1 {
     justify-content: center;
 }
 
-.skill-tooltip {
+.skill-tooltip, .rune-tooltip{
     max-width: 300px;
     position: absolute;
     text-align: left;
@@ -132,7 +146,7 @@ h1 {
     opacity: 0;
 }
 
-.skill-tooltip div strong {
+.skill-tooltip div strong, .rune-tooltip div strong {
     font-size: 15px;
 }
 
@@ -153,4 +167,16 @@ h1 {
     font-size: 20px;
     color: #fff;
     
+}
+
+.rune-name {
+    color: #fff;
+    opacity: 0.6;
+    font-size: 21px;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+}
+
+img.grayscale {
+    filter: grayscale(100%);
+    opacity: 0.4;
 }
