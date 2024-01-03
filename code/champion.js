@@ -34,7 +34,7 @@ d3.selectAll(".dropdown-item").on("click", function () {
     var rank = d3.select(this).text().replace(/(\r\n|\n|\r|\s)/gm, "");
     nowRank = rank;
     displayRate();
-    
+
     dropdown = d3.select("#dropdownSelect");
     dropdown.html("");
     if (rank != "All") {
@@ -192,6 +192,24 @@ const runeDatail = {
     "Sorcery": ["SummonAery", "ArcaneComet", "PhaseRush"],
     "Resolve": ["GraspOfTheUndying", "Aftershock", "Guardian"],
     "Inspiration": ["UnsealedSpellbook", "GlacialAugment", "FirstStrike"]
+};
+
+const perkDetail = {
+    "Precision": [["Overheal", "Triumph", "PresenceOfMind"], ["LegendAlacrity", "LegendTenacity", "LegendBloodline"], ["CoupDeGrace", "CutDown", "LastStand"]],
+    "Domination": [["CheapShot", "TasteOfBlood", "SuddenImpact"], ["ZombieWard", "GhostPoro", "EyeballCollection"], ["TreasureHunter", "IngeniousHunter", "RelentlessHunter", "UltimateHunter"]],
+    "Sorcery": [["NullifyingOrb", "ManaflowBand", "NimbusCloak"], ["Transcendence", "Celerity", "AbsoluteFocus"], ["Scorch", "Waterwalking", "GatheringStorm"]],
+    "Resolve": [["Demolish", "FontOfLife", "ShieldBash"], ["Conditioning", "SecondWind", "BonePlating"], ["Overgrowth", "Revitalize", "Unflinching"]],
+    "Inspiration": [["HextechFlashtraption", "MagicalFootwear", "PerfectTiming"], ["FuturesMarket", "MinionDematerializer", "BiscuitDelivery"], ["CosmicInsight", "ApproachVelocity", "TimeWarpTonic"]]
+};
+
+const statsDetail = ["AdaptiveForce", "AttackSpeed", "CDRScaling", "AdaptiveForce", "Armor", "MagicRes", "HealthScaling", "Armor", "MagicRes"];
+const statsDesc = {
+    "AdaptiveForce": "+9 Adaptive Force", 
+    "AttackSpeed": "+10% Attack Speed",
+    "CDRScaling": "+1-10% CDR (based on level)",
+    "Armor": "+6 Armor",
+    "MagicRes": "+8 Magic Resist",
+    "HealthScaling": "+15-90 Health (based on level)"
 }
 
 // 符文、物品
@@ -201,9 +219,9 @@ Promise.all([
     d3.csv("../data/runesDescription.csv")
 ]).then(function (files) {
 
-    allBuildData = files[0];
-    runeItemData = files[1];
-    runeDescription = files[2];
+    var allBuildData = files[0];
+    var runeItemData = files[1];
+    var runeDescription = files[2];
 
     allBuildData = allBuildData.filter(function (d) {
         return d.championName == name;
@@ -211,20 +229,34 @@ Promise.all([
     runeItemData = runeItemData.filter(function (d) {
         return d.championName == name;
     });
-    
+    runeItemData = runeItemData.map(function(item) {
+        item.mainRunes = item.mainRunes.split(',').map(function(rune) {
+            return rune.replace(/:|\s|\[|\]|\'/g, '');
+        });
+        item.secondaryRunes = item.secondaryRunes.split(',').map(function(rune) {
+            return rune.replace(/:|\s|\[|\]|\'/g, '');
+        });
+        item.stats = item.stats.split(',').map(function(rune) {
+            return parseInt(rune.replace(/:|\s|\[|\]|\'/g, ''));
+        });
+        return item;
+    });
+
+    console.log(runeItemData);
+
     d3.select(".main-rune-img").append("img")
         .attr("src", `../images/rune/Styles/${allBuildData[0].perk1}.png`)
         .attr("alt", `${allBuildData[0].mainRune} image`)
-        .attr("width", "32px")
-        .attr("height", "32px");
+        .attr("width", "35px")
+        .attr("height", "35px");
 
     d3.select(".main-rune-name").text(allBuildData[0].perk1);
 
     d3.select(".secondary-rune-img").append("img")
         .attr("src", `../images/rune/Styles/${allBuildData[0].perk3}.png`)
         .attr("alt", `${allBuildData[0].perk3} image`)
-        .attr("width", "32px")
-        .attr("height", "32px");
+        .attr("width", "35px")
+        .attr("height", "35px");
 
     d3.select(".secondary-rune-name").text(allBuildData[0].perk3);
 
@@ -232,11 +264,52 @@ Promise.all([
         d3.select(".main-perks").append("img")
             .attr("src", `../images/rune/Styles/${allBuildData[0].perk1}/${runeDatail[allBuildData[0].perk1][i]}/${runeDatail[allBuildData[0].perk1][i]}.png`)
             .attr("alt", `${runeDatail[allBuildData[0].perk1][i]} image`)
-            .attr("width", "40px")
-            .attr("height", "40px")
-            .attr("class", (runeDatail[allBuildData[0].perk1][i] == allBuildData[0].perk2.replaceAll(' ', '')) ? "perk-image ms-2" : "perk-image ms-2 grayscale");
+            .attr("width", "45px")
+            .attr("height", "45px")
+            .attr("class", (runeDatail[allBuildData[0].perk1][i] == allBuildData[0].perk2.replaceAll(' ', '')) ? "perk-image mx-2" : "perk-image mx-2 grayscale");
     }
 
+    var mainSmallPerkDiv = d3.selectAll(".main-small-perk")
+    mainSmallPerkDiv.each(function (d, i) {
+        for (let j = 0; j < perkDetail[allBuildData[0].perk1][i].length; j++) {
+            imgContainer = d3.select(this).append("div").attr("class", "d-inline-flex justify-content-center mx-2");
+            imgContainer.append("img")
+                .attr("src", `../images/rune/Styles/${allBuildData[0].perk1}/${perkDetail[allBuildData[0].perk1][i][j]}/${perkDetail[allBuildData[0].perk1][i][j]}.png`)
+                .attr("alt", `${perkDetail[allBuildData[0].perk1][i][j]} image`)
+                .attr("width", "37px")
+                .attr("height", "37px")
+                .attr("class", (runeItemData[0].mainRunes.includes(perkDetail[allBuildData[0].perk1][i][j])) ? "perk-image " + allBuildData[0].perk1.toLowerCase() + "-active" : "perk-image grayscale");
+        }
+    });
+
+    var secondarySmallPerkDiv = d3.selectAll(".secondary-small-perk")
+    secondarySmallPerkDiv.each(function (d, i) {
+        for (let j = 0; j < perkDetail[allBuildData[0].perk3][i].length; j++) {
+            imgContainer = d3.select(this).append("div").attr("class", "d-inline-flex justify-content-center mx-2");
+            imgContainer.append("img")
+                .attr("src", `../images/rune/Styles/${allBuildData[0].perk3}/${perkDetail[allBuildData[0].perk3][i][j]}/${perkDetail[allBuildData[0].perk3][i][j]}.png`)
+                .attr("alt", `${perkDetail[allBuildData[0].perk3][i][j]} image`)
+                .attr("width", "37px")
+                .attr("height", "37px")
+                .attr("class", (runeItemData[0].secondaryRunes.includes(perkDetail[allBuildData[0].perk3][i][j])) ? "perk-image " + allBuildData[0].perk3.toLowerCase() + "-active" : "perk-image grayscale");
+        }
+    });
+
+    var statDiv = d3.selectAll(".stats-rune-img")
+    statDiv.each(function (d, i) {
+        for (let j = 0; j < 3; j++){
+            imgContainer = d3.select(this).append("div").attr("class", "d-inline-flex justify-content-center mx-2");
+            imgContainer.append("img")
+                .attr("src", `../images/rune/StatMods/${statsDetail[i * 3 + j]}.png`)
+                .attr("alt", `${statsDetail[i * 3 + j]} image`)
+                .attr("width", "28")
+                .attr("height", "28")
+                .attr("class", (runeItemData[0].stats.includes(i * 3 + j)) ? "stats-image stats-active" : "stats-image grayscale");
+        }
+    });
+
+
+    // 載入符文說明 Tooltip
     d3.selectAll(".perk-image").on("mouseover", function (event, d) {
         runeName = this.alt.split(' image')[0];
         runeDesc = runeDescription.filter(function (d) {
@@ -250,6 +323,22 @@ Promise.all([
             .html(`
                 <div class="mb-2"><strong>${runeDesc[0].name}</strong></div>
                 <div class="lh-base">${runeDesc[0].longDesc}</div>
+            `);
+    }).on("mouseout", function () {
+        tooltip = d3.select(".rune-tooltip");
+        tooltip.style("opacity", 0);
+    });
+
+    d3.selectAll(".stats-image").on("mouseover", function (event, d) {
+        let statsName = this.alt.split(' image')[0];
+        let statsDescription = statsDesc[statsName];
+
+        tooltip = d3.select(".rune-tooltip");
+        tooltip.style("opacity", 1)
+            .style("left", event.pageX + "px")
+            .style("top", event.pageY + "px")
+            .html(`
+                <div class="lh-base">${statsDescription}</div>
             `);
     }).on("mouseout", function () {
         tooltip = d3.select(".rune-tooltip");
