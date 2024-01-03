@@ -50,7 +50,12 @@ def update_win_pick_num(position_champion_win_rate_df, summoner_team, summoner_c
         position_champion_win_rate_df.loc[summoner_champion.lower(), "total"][2] = f"{total_win_rate:.2%}"
         position_champion_win_rate_df.loc[summoner_champion.lower(), "total"][3] = f"{total_pick_rate:.2%}"
 
-
+def remove_spec_row_col(target_df, pattern):
+    # Drop rows where all values match the pattern
+    target_df = target_df.loc[~target_df.isin([pattern]).all(axis=1)]
+    # Drop columns where all values match the pattern
+    target_df = target_df.loc[:, ~target_df.isin([pattern]).all(axis=0)]
+    return target_df
 
 for summoner_team, summoner_position, summoner_champion, summoner_winFlag, opponent_champion in zip(summoner_teams, summoner_positions, summoner_champions, summoner_winFlags, opponent_champions):
     if summoner_position == 'TOP':
@@ -70,10 +75,14 @@ for summoner_team, summoner_position, summoner_champion, summoner_winFlag, oppon
         update_win_pick_num(support_champion_win_rate_df, summoner_team, summoner_champion, opponent_champion, summoner_winFlag, support_game_num)
 
 
+top_champion_win_rate_df = remove_spec_row_col(top_champion_win_rate_df, [0,0,0,0])
+jungle_champion_win_rate_df = remove_spec_row_col(jungle_champion_win_rate_df, [0,0,0,0])
+mid_champion_win_rate_df = remove_spec_row_col(mid_champion_win_rate_df, [0,0,0,0])
+adc_champion_win_rate_df = remove_spec_row_col(adc_champion_win_rate_df, [0,0,0,0])
+support_champion_win_rate_df = remove_spec_row_col(support_champion_win_rate_df, [0,0,0,0])
 
-top_champion_win_rate_df.to_csv("../data/summoner_win_pick/top_champion_win_pick.json", index=True)
-jungle_champion_win_rate_df.to_csv("../data/summoner_win_pick/jungle_champion_win_pick.json", index=True)
-mid_champion_win_rate_df.to_csv("../data/summoner_win_pick/mid_champion_win_pick.json", index=True)
-adc_champion_win_rate_df.to_csv("../data/summoner_win_pick/adc_champion_win_pick.json", index=True)
-support_champion_win_rate_df.to_csv("../data/summoner_win_pick/support_champion_win_pick.json", index=True)
-
+top_champion_win_rate_df.to_csv("../data/summoner_win_pick/top_champion_win_pick.csv", index=True)
+jungle_champion_win_rate_df.to_csv("../data/summoner_win_pick/jungle_champion_win_pick.csv", index=True)
+mid_champion_win_rate_df.to_csv("../data/summoner_win_pick/mid_champion_win_pick.csv", index=True)
+adc_champion_win_rate_df.to_csv("../data/summoner_win_pick/adc_champion_win_pick.csv", index=True)
+support_champion_win_rate_df.to_csv("../data/summoner_win_pick/support_champion_win_pick.csv", index=True)
