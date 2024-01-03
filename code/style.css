@@ -172,11 +172,45 @@ h5 {
 .rune-name {
     color: #fff;
     opacity: 0.6;
-    font-size: 21px;
+    font-size: 23px;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 img.grayscale {
     filter: grayscale(100%);
     opacity: 0.4;
+}
+
+div :has(> .precision-active){
+    border: solid 2px #dca35c;
+    border-radius: 50%;
+}
+
+div :has(> .resolve-active){
+    border: solid 2px #70ca69;
+    border-radius: 50%;
+}
+
+div :has(> .domination-active){
+    border: solid 2px #b55862;
+    border-radius: 50%;
+}
+
+div :has(> .sorcery-active){
+    border: solid 2px #9facfa;
+    border-radius: 50%;
+}
+
+div :has(> .inspiration-active){
+    border: solid 2px #80d1e8;
+    border-radius: 50%;
+}
+
+div :has(> .stats-image){
+    background-color: #28282F;
+    border-radius: 50%;
+}
+
+div :has(> .stats-active){
+    border: solid 1px #f2bf43;
 }

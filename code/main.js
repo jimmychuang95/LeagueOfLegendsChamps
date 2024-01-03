@@ -264,7 +264,7 @@ function displayBubbleChart(position, rank, sortWith, sortOrder) {
             maxRadius = maxRadius * 1.4;
         }
 
-        if ((sortWith == "pickRate" || sortWith == "banRate") && (sortOrder == "asc")) {
+        if ((sortWith == "pickRate" || sortWith == "banRate" || sortWith == "tier") && (sortOrder == "asc")) {
             minRadius = 5
             maxRadius = 20
         }
