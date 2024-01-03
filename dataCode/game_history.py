@@ -13,15 +13,18 @@ for champion_info in champion_file['data'].items():
 
 champion_win_rate_df = pd.DataFrame(index=champions_name, columns=["total"]+champions_name)
 
-# win, pick, win_rate(win/pick), pick_rate(pick/num_of_games)
-champion_win_rate_df = champion_win_rate_df.applymap(lambda x: [0, 0, 0, 0]) #let all data grid be [0,0,0,0]
-
+# [0,0,0,0]: win, pick, win_rate(win/pick), pick_rate(pick/num_of_games)
 # diff position use diff win_rate table
 top_champion_win_rate_df = champion_win_rate_df.copy()
+top_champion_win_rate_df = top_champion_win_rate_df.applymap(lambda x: [0, 0, 0, 0]) #let all data grid be [0,0,0,0]
 jungle_champion_win_rate_df = champion_win_rate_df.copy()
+jungle_champion_win_rate_df = jungle_champion_win_rate_df.applymap(lambda x: [0, 0, 0, 0]) #let all data grid be [0,0,0,0]
 mid_champion_win_rate_df = champion_win_rate_df.copy()
+mid_champion_win_rate_df = mid_champion_win_rate_df.applymap(lambda x: [0, 0, 0, 0]) #let all data grid be [0,0,0,0]
 adc_champion_win_rate_df = champion_win_rate_df.copy()
+adc_champion_win_rate_df = adc_champion_win_rate_df.applymap(lambda x: [0, 0, 0, 0]) #let all data grid be [0,0,0,0]
 support_champion_win_rate_df = champion_win_rate_df.copy()
+support_champion_win_rate_df = support_champion_win_rate_df.applymap(lambda x: [0, 0, 0, 0]) #let all data grid be [0,0,0,0]
 
 top_game_num, jungle_game_num, mid_game_num, adc_game_num, support_game_num = 0, 0, 0, 0, 0
 
