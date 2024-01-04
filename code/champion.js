@@ -10,9 +10,9 @@ var nowRank = params.get("rank");
 // 處理名字
 var cleannedName = name.replace(/[\s.'"]/g, "");
 switch (cleannedName) {
-    case ("RenataGlasc"): cleannedName = "Renata";
-    case ("Nunu&Willump"): cleannedName = "Nunu";
-    case ("Wukong"): cleannedName = "MonkeyKing";
+    case ("RenataGlasc"): cleannedName = "Renata"; break;
+    case ("Nunu&Willump"): cleannedName = "Nunu"; break;
+    case ("Wukong"): cleannedName = "MonkeyKing"; break;
 }
 var lowerName = cleannedName.toLowerCase();
 
@@ -446,6 +446,36 @@ Promise.all([
     }).on("mouseout", function () {
         tooltip = d3.select(".rune-tooltip");
         tooltip.style("opacity", 0);
+    });
+
+
+
+    var skill = ['Q', 'W', 'E', 'R'];
+    var skillOrder = allBuildData[0].skill2.split(',').map(function (rune) {
+        return rune.replace(/:|\s|\[|\]|\'/g, '');
+    });
+
+    d3.select(".skill-order-img-div").append("img")
+        .attr("src", `../images/passive/${cleannedName}P.png`)
+        .attr("alt", `${cleannedName}P image`)
+        .attr("width", "25px")
+        .attr("height", "25px")
+        .attr("class", "rounded skill-order-img");
+
+    for (let i = 0; i < skill.length; i++) {
+        d3.select(".skill-order-img-div").append("img")
+            .attr("src", `../images/spell/${cleannedName}${skill[i]}.png`)
+            .attr("alt", `${cleannedName}${skill[i]} image`)
+            .attr("width", "25px")
+            .attr("height", "25px")
+            .attr("class", "rounded skill-order-img mt-2");
+    }
+
+    d3.selectAll(".skill-order-div").each(function (d, i) {
+        d3.select(this).append("div").text(skillOrder[i])
+            .attr("class", "skill-order-" + skillOrder[i] + " d-flex justify-content-center align-items-center rounded")
+            .style("width", "22px")
+            .style("height", "22px");
     });
 
 });

@@ -39,7 +39,7 @@ table th:nth-child(2) {
 }
 
 .nav-link.active {
-    color: #444444 !important;
+    color: #555444 !important;
     background-color: #eee !important;
 }
 
@@ -350,4 +350,85 @@ div :has(> .mythic) {
     background-color: #31313b;
     border: solid 2px #f2bf43;
     z-index: 1;
+}
+
+.skill-order-num {
+    color: #999;
+    font-size: 12px;
+}
+
+.skill-order-Q {
+    position: relative;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #28282F;
+    color: rgb(255, 195, 6);
+    margin-top: 1rem;
+}
+
+.skill-order-Q::after {
+    content: "";
+    position: absolute;
+    top: -60%;
+    left: 50%;
+    border-left: 1px solid #555;
+    width: 1px;
+    height: 40%;
+}
+
+.skill-order-W {
+    position: relative;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #28282F;
+    color: rgb(81, 185, 237);
+    margin-top: 3.1rem;
+}
+
+.skill-order-W::after {
+    content: "";
+    position: absolute;
+    top: -210%;
+    left: 50%;
+    border-left: 1px solid #555;
+    width: 1px;
+    height: 180%;
+}
+
+.skill-order-E {
+    position: relative;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #28282F;
+    color: rgb(98, 217, 121);
+    margin-top: 5.2rem;
+}
+
+.skill-order-E::after {
+    content: "";
+    position: absolute;
+    top: -362%;
+    left: 50%;
+    border-left: 1px solid #555;
+    width: 1px;
+    height: 340%;
+}
+
+.skill-order-R {
+    position: relative;
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #28282F;
+    color: rgb(212, 41, 104);
+    margin-top: 7.3rem;
+}
+
+.skill-order-R::after {
+    content: "";
+    position: absolute;
+    top: -514%;
+    left: 50%;
+    border-left: 1px solid #555;
+    width: 1px;
+    height: 500%;
 }
