@@ -352,7 +352,7 @@ Promise.all([
             .attr("height", "35px")
             .attr("class", "rounded item-img");
     } else {
-        bootsDiv.append("span").text("Cassiopeia doesn't need boots")
+        bootsDiv.insert("span", ":first-child").text("Cassiopeia doesn't need boots")
             .attr("style", "font-size: 12px; color: #ddd;");
     }
     
