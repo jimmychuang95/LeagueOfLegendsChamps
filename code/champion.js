@@ -10,9 +10,9 @@ var nowRank = params.get("rank");
 // 處理名字
 var cleannedName = name.replace(/[\s.'"]/g, "");
 switch (cleannedName) {
-    case ("RenataGlasc"): cleannedName = "Renata";
-    case ("Nunu&Willump"): cleannedName = "Nunu";
-    case ("Wukong"): cleannedName = "MonkeyKing";
+    case ("RenataGlasc"): cleannedName = "Renata"; break;
+    case ("Nunu&Willump"): cleannedName = "Nunu"; break;
+    case ("Wukong"): cleannedName = "MonkeyKing"; break;
 }
 var lowerName = cleannedName.toLowerCase();
 
@@ -204,7 +204,7 @@ const perkDetail = {
 
 const statsDetail = ["AdaptiveForce", "AttackSpeed", "CDRScaling", "AdaptiveForce", "Armor", "MagicRes", "HealthScaling", "Armor", "MagicRes"];
 const statsDesc = {
-    "AdaptiveForce": "+9 Adaptive Force", 
+    "AdaptiveForce": "+9 Adaptive Force",
     "AttackSpeed": "+10% Attack Speed",
     "CDRScaling": "+1-10% CDR (based on level)",
     "Armor": "+6 Armor",
@@ -233,29 +233,28 @@ Promise.all([
     runeItemData = runeItemData.filter(function (d) {
         return d.championName == name;
     });
-    runeItemData = runeItemData.map(function(item) {
-        item.mainRunes = item.mainRunes.split(',').map(function(rune) {
+    runeItemData = runeItemData.map(function (item) {
+        item.mainRunes = item.mainRunes.split(',').map(function (rune) {
             return rune.replace(/:|\s|\[|\]|\'/g, '');
         });
-        item.secondaryRunes = item.secondaryRunes.split(',').map(function(rune) {
+        item.secondaryRunes = item.secondaryRunes.split(',').map(function (rune) {
             return rune.replace(/:|\s|\[|\]|\'/g, '');
         });
-        item.stats = item.stats.split(',').map(function(rune) {
+        item.stats = item.stats.split(',').map(function (rune) {
             return parseInt(rune.replace(/:|\s|\[|\]|\'/g, ''));
         });
-        item.starterItemsNum = item.starterItemsNum.split(',').map(function(rune) {
+        item.starterItemsNum = item.starterItemsNum.split(',').map(function (rune) {
             return parseInt(rune.replace(/:|\s|\[|\]|\'/g, ''));
         });
-        item.bootsNum = item.bootsNum.split(',').map(function(rune) {
+        item.bootsNum = item.bootsNum.split(',').map(function (rune) {
             return parseInt(rune.replace(/:|\s|\[|\]|\'/g, ''));
         });
-        item.CoreItemsNum = item.CoreItemsNum.split(',').map(function(rune) {
+        item.CoreItemsNum = item.CoreItemsNum.split(',').map(function (rune) {
             return parseInt(rune.replace(/:|\s|\[|\]|\'/g, ''));
         });
         return item;
     });
 
-    console.log(runeItemData);
 
     d3.select(".main-rune-img").append("img")
         .attr("src", `../images/rune/Styles/${allBuildData[0].perk1}.png`)
@@ -310,7 +309,7 @@ Promise.all([
 
     var statDiv = d3.selectAll(".stats-rune-img")
     statDiv.each(function (d, i) {
-        for (let j = 0; j < 3; j++){
+        for (let j = 0; j < 3; j++) {
             imgContainer = d3.select(this).append("div").attr("class", "stats-border d-inline-flex justify-content-center mx-2");
             imgContainer.append("img")
                 .attr("src", `../images/rune/StatMods/${statsDetail[i * 3 + j]}.png`)
@@ -355,7 +354,7 @@ Promise.all([
         bootsDiv.insert("span", ":first-child").text("Cassiopeia doesn't need boots")
             .attr("style", "font-size: 12px; color: #ddd;");
     }
-    
+
     var coreItemDiv = d3.select(".core-items-img-div");
     for (let i = 0; i < runeItemData[0].CoreItemsNum.length; i++) {
         imgContainer = coreItemDiv.insert("div", ":first-child").attr("class", "items-border d-inline-flex justify-content-center me-2 rounded");
@@ -367,7 +366,7 @@ Promise.all([
             .attr("class", (itemsDescription.data[runeItemData[0].CoreItemsNum[i]].description.includes('<rarityMythic>')) ? "mythic rounded item-img" : "rounded item-img");
     }
 
- 
+
 
 
     // 載入符文、召喚師技能、裝備 Tooltip
@@ -407,7 +406,7 @@ Promise.all([
     });
 
     d3.selectAll(".summoner-img").on("mouseover", function (event, d) {
-        let summonerId= this.alt.split(' image')[0];
+        let summonerId = this.alt.split(' image')[0];
 
         if (summonerId == "SummonerIgnite") {
             summonerId = "SummonerDot";
@@ -449,4 +448,237 @@ Promise.all([
         tooltip.style("opacity", 0);
     });
 
+
+
+    var skill = ['Q', 'W', 'E', 'R'];
+    var skillOrder = allBuildData[0].skill2.split(',').map(function (rune) {
+        return rune.replace(/:|\s|\[|\]|\'/g, '');
+    });
+
+    d3.select(".skill-order-img-div").append("img")
+        .attr("src", `../images/passive/${cleannedName}P.png`)
+        .attr("alt", `${cleannedName}P image`)
+        .attr("width", "25px")
+        .attr("height", "25px")
+        .attr("class", "rounded skill-order-img");
+
+    for (let i = 0; i < skill.length; i++) {
+        d3.select(".skill-order-img-div").append("img")
+            .attr("src", `../images/spell/${cleannedName}${skill[i]}.png`)
+            .attr("alt", `${cleannedName}${skill[i]} image`)
+            .attr("width", "25px")
+            .attr("height", "25px")
+            .attr("class", "rounded skill-order-img mt-2");
+    }
+
+    d3.selectAll(".skill-order-div").each(function (d, i) {
+        d3.select(this).append("div").text(skillOrder[i])
+            .attr("class", "skill-order-" + skillOrder[i] + " d-flex justify-content-center align-items-center rounded")
+            .style("width", "22px")
+            .style("height", "22px");
+    });
+
+});
+
+d3.csv("../data/bestAgainst.csv").then(function (data) {
+    data = data.filter(function (d) {
+        return d.championName == name;
+    });
+
+    data = data.map(function (item) {
+        let keys = Object.keys(item);
+        for (let i = 1; i < keys.length; i++) {
+            let key = keys[i];
+            item[key] = item[key].split(',').map(function (rune) {
+                return rune.replace(/:|\s|\[|\]|\'|\"/g, '');
+            });
+        }
+        return item;
+    });
+
+
+    saChampDiv = d3.selectAll(".sa-champion-div");
+    saChampDiv.each(function (d, i) {
+        d3.select(this).select(".sa-win-rate").text(Object.values(data[0])[i + 1][1]);
+        d3.select(this).select(".rate-champion-name").append("span").text(Object.values(data[0])[i + 1][0]);
+        var div = d3.select(this).select(".strong-against-border");
+
+        targetedChampion = Object.values(data[0])[i + 1][0].replace(/[\s.'"]/g, "");
+        switch (targetedChampion) {
+            case "Nunu&Willump": targetedChampion = "Nunu"; break;
+            case "RenataGlasc": targetedChampion = "Renata"; break;
+            case "Wukong": targetedChampion = "MonkeyKing"; break;
+        }
+        div.append("div")
+            .style("background-image", `url(../images/champion/${targetedChampion}.png)`)
+            .attr("class", "rounded-circle rate-champion-img");
+
+        var width = div.node().getBoundingClientRect().width + 10;
+        var height = div.node().getBoundingClientRect().height + 10;
+        var twoPi = 2 * Math.PI
+        var rate = parseInt(Object.values(data[0])[i + 1][1].split("%")[0]) / 100;
+
+        var arc = d3.arc()
+            .startAngle(0)
+            .innerRadius(width / 2 - 2.5)
+            .outerRadius(width / 2);
+
+        svg = d3.select(this).select(".rate-meter").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+        var meter = svg.append("g")
+            .attr("class", "meter");
+
+        meter.append("path")
+            .attr("class", "meter-background")
+            .attr("d", arc.endAngle(twoPi));
+
+        meter.append("path")
+            .attr("class", "sa-meter-foreground")
+            .attr("d", arc.endAngle(twoPi * rate));
+    });
+});
+
+d3.csv("../data/worstAgainst.csv").then(function (data) {
+    data = data.filter(function (d) {
+        return d.championName == name;
+    });
+
+    data = data.map(function (item) {
+        let keys = Object.keys(item);
+        for (let i = 1; i < keys.length; i++) {
+            let key = keys[i];
+            item[key] = item[key].split(',').map(function (rune) {
+                return rune.replace(/:|\s|\[|\]|\'|\"/g, '');
+            });
+        }
+        return item;
+    });
+
+
+    waChampDiv = d3.selectAll(".wa-champion-div");
+    waChampDiv.each(function (d, i) {
+        d3.select(this).select(".wa-win-rate").text(Object.values(data[0])[i + 1][1]);
+        d3.select(this).select(".rate-champion-name").append("span").text(Object.values(data[0])[i + 1][0]);
+        var div = d3.select(this).select(".weak-against-border");
+
+        targetedChampion = Object.values(data[0])[i + 1][0].replace(/[\s.'"]/g, "");
+        switch (targetedChampion) {
+            case "Nunu&Willump": targetedChampion = "Nunu"; break;
+            case "RenataGlasc": targetedChampion = "Renata"; break;
+            case "Wukong": targetedChampion = "MonkeyKing"; break;
+        }
+        div.append("div")
+            .style("background-image", `url(../images/champion/${targetedChampion}.png)`)
+            .attr("class", "rounded-circle rate-champion-img");
+
+        var width = div.node().getBoundingClientRect().width + 10;
+        var height = div.node().getBoundingClientRect().height + 10;
+        var twoPi = 2 * Math.PI
+        var rate = parseInt(Object.values(data[0])[i + 1][1].split("%")[0]) / 100;
+
+        var arc = d3.arc()
+            .startAngle(0)
+            .innerRadius(width / 2 - 2.5)
+            .outerRadius(width / 2);
+
+        svg = d3.select(this).select(".rate-meter").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+        var meter = svg.append("g")
+            .attr("class", "meter");
+
+        meter.append("path")
+            .attr("class", "meter-background")
+            .attr("d", arc.endAngle(twoPi));
+
+        meter.append("path")
+            .attr("class", "wa-meter-foreground")
+            .attr("d", arc.endAngle(twoPi * rate));
+    });
+
+});
+
+d3.csv("../data/championBestDuo.csv").then(function (data) {
+    data = data.filter(function (d) {
+        return d.championName == name;
+    });
+
+    data = data.map(function (item) {
+        let keys = Object.keys(item);
+        for (let i = 1; i < keys.length; i++) {
+            let key = keys[i];
+            item[key] = item[key].split(',').map(function (rune) {
+                return rune.replace(/:|\s|\[|\]|\'|\"/g, '');
+            });
+        }
+        return item;
+    });
+
+
+    syChampDiv = d3.selectAll(".bs-champion-div");
+    syChampDiv.each(function (d, i) {
+        d3.select(this).select(".bs-win-rate").text(Object.values(data[0])[i + 1][1]);
+        d3.select(this).select(".rate-champion-name").append("span").text(Object.values(data[0])[i + 1][0]);
+
+        targettedPosition = Object.values(data[0])[i + 1][2].toLowerCase();
+        if (targettedPosition == "bot") {
+            targettedPosition = "adc";
+        }
+
+        console.log(targettedPosition);
+
+        d3.select(this).select(".bs-position").append("img")
+            .attr("src", `../images/position/${targettedPosition}.svg`)
+            .attr("alt", `${targettedPosition} image`)
+            .attr("width", "80%")
+            .attr("height", "80%")
+            .attr("class", "position-img");
+
+        var div = d3.select(this).select(".best-duo-border");
+
+        targetedChampion = Object.values(data[0])[i + 1][0].replace(/[\s.'"]/g, "");
+        switch (targetedChampion) {
+            case "Nunu&Willump": targetedChampion = "Nunu"; break;
+            case "RenataGlasc": targetedChampion = "Renata"; break;
+            case "Wukong": targetedChampion = "MonkeyKing"; break;
+        }
+
+        div.append("div")
+            .style("background-image", `url(../images/champion/${targetedChampion}.png)`)
+            .attr("class", "rounded-circle rate-champion-img");
+
+        var width = div.node().getBoundingClientRect().width + 10;
+        var height = div.node().getBoundingClientRect().height + 10;
+        var twoPi = 2 * Math.PI
+        var rate = parseInt(Object.values(data[0])[i + 1][1].split("%")[0]) / 100;
+
+        var arc = d3.arc()
+            .startAngle(0)
+            .innerRadius(width / 2 - 2.5)
+            .outerRadius(width / 2);
+
+        svg = d3.select(this).select(".rate-meter").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+
+        var meter = svg.append("g")
+            .attr("class", "meter");
+
+        meter.append("path")
+            .attr("class", "meter-background")
+            .attr("d", arc.endAngle(twoPi));
+
+        meter.append("path")
+            .attr("class", "bs-meter-foreground")
+            .attr("d", arc.endAngle(twoPi * rate));
+    });
 });

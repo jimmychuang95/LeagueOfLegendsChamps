@@ -120,9 +120,9 @@ function displayChampions(position, rank, sortWith, sortOrder) {
                     // 如果是第二個 column，則插入圖片
                     var cleanedValue = d.value.replace(/[\s.'"]/g, "");
                     switch (cleanedValue) {
-                        case ("RenataGlasc"): cleanedValue = "Renekton";
-                        case ("Nunu&Willump"): cleanedValue = "Nunu";
-                        case ("Wukong"): cleanedValue = "MonkeyKing";
+                        case ("RenataGlasc"): cleanedValue = "Renata"; break;
+                        case ("Nunu&Willump"): cleanedValue = "Nunu"; break;
+                        case ("Wukong"): cleanedValue = "MonkeyKing"; break;
                     }
 
                     return '<img src="../images/champion/' + cleanedValue + '.png" class="me-2" alt="' + d.value + '" width="30" height="30">' + d.value;
@@ -294,9 +294,9 @@ function displayBubbleChart(position, rank, sortWith, sortOrder) {
         data.forEach((d, i) => {
             var cleannedName = d.name.replace(/[\s.'"]/g, "");
             switch (cleannedName) {
-                case ("RenataGlasc"): cleannedName = "Renekton";
-                case ("Nunu&Willump"): cleannedName = "Nunu";
-                case ("Wukong"): cleannedName = "MonkeyKing";
+                case ("RenataGlasc"): cleannedName = "Renata"; break;
+                case ("Nunu&Willump"): cleannedName = "Nunu"; break;
+                case ("Wukong"): cleannedName = "MonkeyKing"; break;
             }
 
             defs.append('pattern')
@@ -340,9 +340,9 @@ function displayBubbleChart(position, rank, sortWith, sortOrder) {
                 .style("fill", function (d, i) {
                     var cleannedName = d.name.replace(/[\s.'"]/g, "");
                     switch (cleannedName) {
-                        case ("RenataGlasc"): cleannedName = "Renekton";
-                        case ("Nunu&Willump"): cleannedName = "Nunu";
-                        case ("Wukong"): cleannedName = "MonkeyKing";
+                        case ("RenataGlasc"): cleannedName = "Renata"; break;
+                        case ("Nunu&Willump"): cleannedName = "Nunu"; break;
+                        case ("Wukong"): cleannedName = "MonkeyKing"; break;
                     }
 
                     return "url(#hero-image-" + cleannedName + "-" + i + ")";
