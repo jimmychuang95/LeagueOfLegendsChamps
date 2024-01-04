@@ -216,12 +216,16 @@ const statsDesc = {
 Promise.all([
     d3.csv("../data/all_build.csv"),
     d3.csv("../data/rune_item.csv"),
-    d3.csv("../data/runesDescription.csv")
+    d3.csv("../data/runesDescription.csv"),
+    d3.json("../data/summonerSpell.json"),
+    d3.json("../data/itemsDescription.json")
 ]).then(function (files) {
 
     var allBuildData = files[0];
     var runeItemData = files[1];
     var runeDescription = files[2];
+    var summonerSpell = files[3];
+    var itemsDescription = files[4];
 
     allBuildData = allBuildData.filter(function (d) {
         return d.championName == name;
@@ -237,6 +241,15 @@ Promise.all([
             return rune.replace(/:|\s|\[|\]|\'/g, '');
         });
         item.stats = item.stats.split(',').map(function(rune) {
+            return parseInt(rune.replace(/:|\s|\[|\]|\'/g, ''));
+        });
+        item.starterItemsNum = item.starterItemsNum.split(',').map(function(rune) {
+            return parseInt(rune.replace(/:|\s|\[|\]|\'/g, ''));
+        });
+        item.bootsNum = item.bootsNum.split(',').map(function(rune) {
+            return parseInt(rune.replace(/:|\s|\[|\]|\'/g, ''));
+        });
+        item.CoreItemsNum = item.CoreItemsNum.split(',').map(function(rune) {
             return parseInt(rune.replace(/:|\s|\[|\]|\'/g, ''));
         });
         return item;
@@ -272,7 +285,7 @@ Promise.all([
     var mainSmallPerkDiv = d3.selectAll(".main-small-perk")
     mainSmallPerkDiv.each(function (d, i) {
         for (let j = 0; j < perkDetail[allBuildData[0].perk1][i].length; j++) {
-            imgContainer = d3.select(this).append("div").attr("class", "d-inline-flex justify-content-center mx-2");
+            imgContainer = d3.select(this).append("div").attr("class", "perk-border d-inline-flex justify-content-center mx-2");
             imgContainer.append("img")
                 .attr("src", `../images/rune/Styles/${allBuildData[0].perk1}/${perkDetail[allBuildData[0].perk1][i][j]}/${perkDetail[allBuildData[0].perk1][i][j]}.png`)
                 .attr("alt", `${perkDetail[allBuildData[0].perk1][i][j]} image`)
@@ -285,7 +298,7 @@ Promise.all([
     var secondarySmallPerkDiv = d3.selectAll(".secondary-small-perk")
     secondarySmallPerkDiv.each(function (d, i) {
         for (let j = 0; j < perkDetail[allBuildData[0].perk3][i].length; j++) {
-            imgContainer = d3.select(this).append("div").attr("class", "d-inline-flex justify-content-center mx-2");
+            imgContainer = d3.select(this).append("div").attr("class", "perk-border d-inline-flex justify-content-center mx-2");
             imgContainer.append("img")
                 .attr("src", `../images/rune/Styles/${allBuildData[0].perk3}/${perkDetail[allBuildData[0].perk3][i][j]}/${perkDetail[allBuildData[0].perk3][i][j]}.png`)
                 .attr("alt", `${perkDetail[allBuildData[0].perk3][i][j]} image`)
@@ -298,7 +311,7 @@ Promise.all([
     var statDiv = d3.selectAll(".stats-rune-img")
     statDiv.each(function (d, i) {
         for (let j = 0; j < 3; j++){
-            imgContainer = d3.select(this).append("div").attr("class", "d-inline-flex justify-content-center mx-2");
+            imgContainer = d3.select(this).append("div").attr("class", "stats-border d-inline-flex justify-content-center mx-2");
             imgContainer.append("img")
                 .attr("src", `../images/rune/StatMods/${statsDetail[i * 3 + j]}.png`)
                 .attr("alt", `${statsDetail[i * 3 + j]} image`)
@@ -308,8 +321,56 @@ Promise.all([
         }
     });
 
+    var summonSkillDiv = d3.selectAll(".summoner-img-div")
+    summonSkillDiv.each(function (d, i) {
+        d3.select(this).append("img")
+            .attr("src", `../images/spell/Summoner${allBuildData[0]["sumSpell" + (i + 1)]}.png`)
+            .attr("alt", `Summoner${allBuildData[0]["sumSpell" + (i + 1)]} image`)
+            .attr("width", "35px")
+            .attr("height", "35px")
+            .attr("class", "rounded summoner-img");
+    });
 
-    // 載入符文說明 Tooltip
+    var starterItemDiv = d3.select(".starter-items-img-div")
+    for (let i = 0; i < runeItemData[0].starterItemsNum.length; i++) {
+        imgContainer = starterItemDiv.insert("div", ":first-child").attr("class", "items-border d-inline-flex justify-content-center me-2 rounded");
+        imgContainer.append("img")
+            .attr("src", `../images/item/${runeItemData[0].starterItemsNum[i]}.png`)
+            .attr("alt", `${runeItemData[0].starterItemsNum[i]} image`)
+            .attr("width", "35px")
+            .attr("height", "35px")
+            .attr("class", "rounded item-img");
+    }
+
+    var bootsDiv = d3.select(".boots-img-div")
+    if (!isNaN(runeItemData[0].bootsNum[0])) {
+        imgContainer = bootsDiv.insert("div", ":first-child").attr("class", "items-border d-inline-flex justify-content-center me-2 rounded");
+        imgContainer.append("img")
+            .attr("src", `../images/item/${runeItemData[0].bootsNum[0]}.png`)
+            .attr("alt", `${runeItemData[0].bootsNum[0]} image`)
+            .attr("width", "35px")
+            .attr("height", "35px")
+            .attr("class", "rounded item-img");
+    } else {
+        bootsDiv.append("span").text("Cassiopeia doesn't need boots")
+            .attr("style", "font-size: 12px; color: #ddd;");
+    }
+    
+    var coreItemDiv = d3.select(".core-items-img-div");
+    for (let i = 0; i < runeItemData[0].CoreItemsNum.length; i++) {
+        imgContainer = coreItemDiv.insert("div", ":first-child").attr("class", "items-border d-inline-flex justify-content-center me-2 rounded");
+        imgContainer.append("img")
+            .attr("src", `../images/item/${runeItemData[0].CoreItemsNum[i]}.png`)
+            .attr("alt", `${runeItemData[0].CoreItemsNum[i]} image`)
+            .attr("width", "35px")
+            .attr("height", "35px")
+            .attr("class", "rounded item-img");
+    }
+
+ 
+
+
+    // 載入符文、召喚師技能、裝備 Tooltip
     d3.selectAll(".perk-image").on("mouseover", function (event, d) {
         runeName = this.alt.split(' image')[0];
         runeDesc = runeDescription.filter(function (d) {
@@ -339,6 +400,31 @@ Promise.all([
             .style("top", event.pageY + "px")
             .html(`
                 <div class="lh-base">${statsDescription}</div>
+            `);
+    }).on("mouseout", function () {
+        tooltip = d3.select(".rune-tooltip");
+        tooltip.style("opacity", 0);
+    });
+
+    d3.selectAll(".summoner-img").on("mouseover", function (event, d) {
+        let summonerId= this.alt.split(' image')[0];
+
+        if (summonerId == "SummonerIgnite") {
+            summonerId = "SummonerDot";
+        } else if (summonerId == "SummonerGhost") {
+            summonerId = "SummonerHaste";
+        }
+
+        let summonerName = summonerSpell.data[summonerId].name;
+        let summonerDescription = summonerSpell.data[summonerId].description;
+
+        tooltip = d3.select(".rune-tooltip");
+        tooltip.style("opacity", 1)
+            .style("left", event.pageX + "px")
+            .style("top", event.pageY + "px")
+            .html(`
+                <div class="mb-2"><strong>${summonerName}</strong></div>
+                <div class="lh-base">${summonerDescription}</div>
             `);
     }).on("mouseout", function () {
         tooltip = d3.select(".rune-tooltip");
