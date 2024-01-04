@@ -74,7 +74,7 @@ for champion in championsUrl:
     bestDuo_div = soup.find_all(name = 'div', attrs = {'class': 'm-gumcrk'})
 
     if len(bestDuo_div) == 3:
-        bestDuo_a = bestDuo_div[2].find_all(name = 'a', attrs = {'class': 'm-di7nx6'})
+        bestDuo_a = bestDuo_div[0].find_all(name = 'a', attrs = {'class': 'm-di7nx6'})
         if len(bestDuo_a) == 6:
             tempBestDuo1 = []
             tempBestDuo2 = []
@@ -85,34 +85,34 @@ for champion in championsUrl:
             for i in range(0, 6):
                 if i == 0:
                     tempBestDuo1.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-v1s0fv'}).text)
-                    tempBestDuo1.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-d1usi'}).text)
-                    position_div = bestDuo_a[i].find(name = 'div', attrs = {'class': 'm-amdtug'})
-                    tempBestDuo1.append(position_div.find(name = 'img').attrs['alt'])
+                    tempBestDuo1.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-1wtyuy0'}).text)
+                    #position_div = bestDuo_a[i].find(name = 'div', attrs = {'class': 'm-amdtug'})
+                    #tempBestDuo1.append(position_div.find(name = 'img').attrs['alt'])
                 elif i == 1:
                     tempBestDuo2.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-v1s0fv'}).text)
-                    tempBestDuo2.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-d1usi'}).text)
-                    position_div = bestDuo_a[i].find(name = 'div', attrs = {'class': 'm-amdtug'})
-                    tempBestDuo2.append(position_div.find(name = 'img').attrs['alt'])
+                    tempBestDuo2.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-1wtyuy0'}).text)
+                    #position_div = bestDuo_a[i].find(name = 'div', attrs = {'class': 'm-amdtug'})
+                    #tempBestDuo2.append(position_div.find(name = 'img').attrs['alt'])
                 elif i == 2:
                     tempBestDuo3.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-v1s0fv'}).text)
-                    tempBestDuo3.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-d1usi'}).text)
-                    position_div = bestDuo_a[i].find(name = 'div', attrs = {'class': 'm-amdtug'})
-                    tempBestDuo3.append(position_div.find(name = 'img').attrs['alt'])
+                    tempBestDuo3.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-1wtyuy0'}).text)
+                    #position_div = bestDuo_a[i].find(name = 'div', attrs = {'class': 'm-amdtug'})
+                    #tempBestDuo3.append(position_div.find(name = 'img').attrs['alt'])
                 elif i == 3:
                     tempBestDuo4.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-v1s0fv'}).text)
-                    tempBestDuo4.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-d1usi'}).text)
-                    position_div = bestDuo_a[i].find(name = 'div', attrs = {'class': 'm-amdtug'})
-                    tempBestDuo4.append(position_div.find(name = 'img').attrs['alt'])
+                    tempBestDuo4.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-1wtyuy0'}).text)
+                    #position_div = bestDuo_a[i].find(name = 'div', attrs = {'class': 'm-amdtug'})
+                    #tempBestDuo4.append(position_div.find(name = 'img').attrs['alt'])
                 elif i == 4:
                     tempBestDuo5.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-v1s0fv'}).text)
-                    tempBestDuo5.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-d1usi'}).text)
-                    position_div = bestDuo_a[i].find(name = 'div', attrs = {'class': 'm-amdtug'})
-                    tempBestDuo5.append(position_div.find(name = 'img').attrs['alt'])
+                    tempBestDuo5.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-1wtyuy0'}).text)
+                    #position_div = bestDuo_a[i].find(name = 'div', attrs = {'class': 'm-amdtug'})
+                    #tempBestDuo5.append(position_div.find(name = 'img').attrs['alt'])
                 elif i == 5:
                     tempBestDuo6.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-v1s0fv'}).text)
-                    tempBestDuo6.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-d1usi'}).text)
-                    position_div = bestDuo_a[i].find(name = 'div', attrs = {'class': 'm-amdtug'})
-                    tempBestDuo6.append(position_div.find(name = 'img').attrs['alt'])
+                    tempBestDuo6.append(bestDuo_a[i].find(name = 'p', attrs = {'class': 'm-1wtyuy0'}).text)
+                    #position_div = bestDuo_a[i].find(name = 'div', attrs = {'class': 'm-amdtug'})
+                    #tempBestDuo6.append(position_div.find(name = 'img').attrs['alt'])
 
             bestDuo1.append(tempBestDuo1)
             bestDuo2.append(tempBestDuo2)
@@ -143,6 +143,6 @@ for champion in championsUrl:
 
 driver.quit()
 
-df1 = pd.DataFrame({'championName': championName, 'bestDuo1': bestDuo1, 'bestDuo2': bestDuo2, 'bestDuo3': bestDuo3, 'bestDuo4': bestDuo4, 'bestDuo5': bestDuo5, 'bestDuo6': bestDuo6})
-df1.to_csv('../data/championBestDuo2.csv', encoding='utf-8', index=False)
+df1 = pd.DataFrame({'championName': championName, 'worstAgainst1': bestDuo1, 'worstAgainst2': bestDuo2, 'worstAgainst3': bestDuo3, 'worstAgainst4': bestDuo4, 'worstAgainst5': bestDuo5, 'worstAgainst6': bestDuo6})
+df1.to_csv('../data/worstAgainst3.csv', encoding='utf-8', index=False)
             
