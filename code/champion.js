@@ -364,7 +364,7 @@ Promise.all([
             .attr("alt", `${runeItemData[0].CoreItemsNum[i]} image`)
             .attr("width", "35px")
             .attr("height", "35px")
-            .attr("class", "rounded item-img");
+            .attr("class", (itemsDescription.data[runeItemData[0].CoreItemsNum[i]].description.includes('<rarityMythic>')) ? "mythic rounded item-img" : "rounded item-img");
     }
 
  
@@ -430,4 +430,23 @@ Promise.all([
         tooltip = d3.select(".rune-tooltip");
         tooltip.style("opacity", 0);
     });
+
+    d3.selectAll(".item-img").on("mouseover", function (event, d) {
+        let itemId = this.alt.split(' image')[0];
+        let itemDescription = itemsDescription.data[itemId];
+
+        tooltip = d3.select(".rune-tooltip");
+        tooltip.style("opacity", 0);
+        tooltip.style("opacity", 1)
+            .style("left", event.pageX + "px")
+            .style("top", event.pageY + "px")
+            .html(`
+                <div class="mb-2"><strong>${itemDescription.name}</strong></div>
+                <div class="lh-base">${itemDescription.description}</div>
+            `);
+    }).on("mouseout", function () {
+        tooltip = d3.select(".rune-tooltip");
+        tooltip.style("opacity", 0);
+    });
+
 });
