@@ -1,5 +1,7 @@
 var nowSort = "tier";
 var nowOrder = "desc";
+var nowMode = "OPPICK"
+var position = "ALL";
 
 var difficultyOrder = {
     "Severe": 1,
@@ -31,7 +33,13 @@ d3.selectAll(".dropdown-item").on("click", function () {
 
 d3.selectAll("#positionTab .nav-item").on("click", function () {
     var rank = d3.select("#dropdownSelect").text().replace(/(\r\n|\n|\r|\s)/gm, "").toLowerCase();
-    var position = d3.select(this).text().replace(/(\r\n|\n|\r|\s)/gm, "").toUpperCase();
+    position = d3.select(this).text().replace(/(\r\n|\n|\r|\s)/gm, "").toUpperCase();
+    displayAllInfo(position, rank, nowSort, nowOrder);
+});
+
+d3.selectAll("#modeTab .nav-item").on("click", function () {
+    var rank = d3.select("#dropdownSelect").text().replace(/(\r\n|\n|\r|\s)/gm, "").toLowerCase();
+    nowMode = d3.select(this).text().replace(/(\r\n|\n|\r|\s)/gm, "").toUpperCase();
     displayAllInfo(position, rank, nowSort, nowOrder);
 });
 
@@ -45,7 +53,6 @@ function displayChampions(position, rank, sortWith, sortOrder) {
 
         var data = files[0];
         var difficultyData = files[1];
-
         data.forEach(function (d) {
             var difficulty = difficultyData.find(function (dd) { return dd.championName === d.name; });
             if (difficulty) {
@@ -87,7 +94,7 @@ function displayChampions(position, rank, sortWith, sortOrder) {
                 return sortOrder == "desc" ? a.tier - b.tier : b.tier - a.tier;
             });
         }
-
+        
         var table = d3.select("#champions-table");
         var tbody = table.append("tbody");
         var rows = tbody.selectAll("tr")
@@ -214,7 +221,6 @@ function displayBubbleChart(position, rank, sortWith, sortOrder) {
             return d;
         });
 
-        console.log(data);
 
         if (position !== "ALL") {
             if (position === "MIDDLE") {
@@ -398,68 +404,238 @@ function displayBubbleChart(position, rank, sortWith, sortOrder) {
     });
 }
 
-d3.selectAll("#champions-table .hoverable").on("click", function () {
-    var rank = d3.select("#dropdownSelect").text().replace(/(\r\n|\n|\r|\s)/gm, "").toLowerCase();
-    var position = d3.select(".nav-link.active").text().replace(/(\r\n|\n|\r|\s)/gm, "").toUpperCase();
-    if (d3.select(this).attr("id") === "tier-th") {
-        if (nowSort === "tier") {
-            nowOrder = nowOrder === "desc" ? "asc" : "desc";
-        } else {
-            nowOrder = "desc";
-        }
-        nowSort = "tier";
-        displayAllInfo(position, rank, "tier", nowOrder);
-        d3.selectAll(".nowSort").classed("nowSort", false);
-        d3.select(this).classed("nowSort", true);
-
-        console.log(nowOrder)
-    } else if (d3.select(this).attr("id") === "wr-th") {
-        if (nowSort === "winRate") {
-            nowOrder = nowOrder === "desc" ? "asc" : "desc";
-        } else {
-            nowOrder = "desc";
-        }
-        nowSort = "winRate";
-        displayAllInfo(position, rank, "winRate", nowOrder);
-        d3.selectAll(".nowSort").classed("nowSort", false);
-        d3.select(this).classed("nowSort", true);
-        console.log(nowOrder)
-    } else if (d3.select(this).attr("id") === "pr-th") {
-        if (nowSort === "pickRate") {
-            nowOrder = nowOrder === "desc" ? "asc" : "desc";
-        } else {
-            nowOrder = "desc";
-        }
-        nowSort = "pickRate";
-        displayAllInfo(position, rank, "pickRate", nowOrder);
-        d3.selectAll(".nowSort").classed("nowSort", false);
-        d3.select(this).classed("nowSort", true);
-    } else if (d3.select(this).attr("id") === "br-th") {
-        if (nowSort === "banRate") {
-            nowOrder = nowOrder === "desc" ? "asc" : "desc";
-        } else {
-            nowOrder = "desc";
-        }
-        nowSort = "banRate";
-        displayAllInfo(position, rank, "banRate", nowOrder);
-        d3.selectAll(".nowSort").classed("nowSort", false);
-        d3.select(this).classed("nowSort", true);
-    } else if (d3.select(this).attr("id") === "df-th") {
-        if (nowSort === "difficulty") {
-            nowOrder = nowOrder === "desc" ? "asc" : "desc";
-        } else {
-            nowOrder = "desc";
-        }
-        nowSort = "difficulty";
-        displayAllInfo(position, rank, "difficulty", nowOrder);
-        d3.selectAll(".nowSort").classed("nowSort", false);
-        d3.select(this).classed("nowSort", true);
+//TODO: 1. 建立每個位置表格 2. 建立counter pick表格 3.當是all position時，顯示所有位置表格
+function displaySummonerChampions(summonerName, position, rank, sortWith, sortOrder) {
+    d3.selectAll("tbody").html(""); // 清空內容
+    if (position === "TOP") {
+        positionTalbe = "top_champion_win_pick";
+    }else if (position === "JUNGLE") {
+        positionTalbe = "jungle_champion_win_pick";
+    }else if (position === "MIDDLE") {
+        position = "MID";
+        positionTalbe = "mid_champion_win_pick";
+    }else if (position === "BOTTOM") {
+        position = "ADC";
+        positionTalbe = "adc_champion_win_pick";
+    }else if (position === "SUPPORT") {
+        positionTalbe = "support_champion_win_pick";
+    }else{
+        positionTalbe = "top_champion_win_pick";
+        //TODO: positionTalbe = "all_champion_win_pick";
     }
-});
+    Promise.all([
+        d3.csv("../data/summoner/" + summonerName +"/summoner_win_pick/"+positionTalbe+".csv")
+        // d3.csv("../data/championDifficulty.csv")  // 假設你的難度數據在這個文件中
+    ]).then(function (files) {
+        var data = files[0];
+        var data = data.map(function(row) {
+            row["total"] = JSON.parse(row["total"]);
+            return {
+                col1: String(""),
+                col: String(""),
+                name: String(row[""]),
+                win:  String(row["total"][0]),
+                pick: String(row["total"][1]),
+                winRate: String(row["total"][2]),
+                pickRate: String(row["total"][3])
+            };
+        });
+        if (sortWith === "winRate") {
+            data.sort(function (a, b) {
+                return sortOrder == "desc" ? b.winRate - a.winRate : a.winRate - b.winRate;
+            });
+        } else if (sortWith === "pickRate") {
+            data.sort(function (a, b) {
+                return sortOrder == "desc" ? b.pickRate - a.pickRate : a.pickRate - b.pickRate;
+            });
+        } else if (sortWith === "banRate") {
+            data.sort(function (a, b) {
+                return sortOrder == "desc" ? b.banRate - a.banRate : a.banRate - b.banRate;
+            });
+        } else if (sortWith === "difficulty") {
+            data.sort(function (a, b) {
+                return sortOrder == "desc" ? difficultyOrder[a.difficulty] - difficultyOrder[b.difficulty] : difficultyOrder[b.difficulty] - difficultyOrder[a.difficulty];
+            });
+        } else if (sortWith === "win") {
+            data.sort(function (a, b) {
+                return sortOrder == "desc" ? b.win - a.win : a.win - b.win;
+            });
+        }else if (sortWith === "pick") {
+            data.sort(function (a, b) {
+                return sortOrder == "desc" ? b.pick - a.pick : a.pick - b.pick;
+            });
+        }
+        else {
+            data.sort(function (a, b) {
+                return sortOrder == "desc" ? a.tier - b.tier : b.tier - a.tier;
+            });
+        }
 
-function displayAllInfo(position, rank, sortWith, sortOrder) {
-    displayChampions(position, rank, sortWith, sortOrder);
-    displayBubbleChart(position, rank, sortWith, sortOrder);
+        var table = d3.select("#champions-table");
+        var tbody = table.append("tbody");
+        var rows = tbody.selectAll("tr")
+            .data(data)
+            .enter()
+            .append("tr")
+            .on("click", function (event, d) {
+                window.open("champion.html?name=" + encodeURIComponent(d.name) + "&tier=" + encodeURIComponent(d.tier) + "&rank=" + encodeURIComponent(rank), "_self");
+            });
+
+        var cells = rows.selectAll("td")
+            .data(function (row, i) {
+                return Object.values(row).slice(1).map(function (value, j) {
+                    return { value: value, row: i, column: j };
+                });
+            })
+            .enter()
+            .append("td")
+            .html(function (d) {
+                if (d.column === 1) {
+                    // 如果是第二個 column，則插入圖片
+                    var cleanedValue = d.value.replace(/[\s.'"]/g, "");
+                    switch (cleanedValue) {
+                        case ("RenataGlasc"): cleanedValue = "Renekton";
+                        case ("Nunu&Willump"): cleanedValue = "Nunu";
+                        case ("Wukong"): cleanedValue = "MonkeyKing";
+                    }
+                    return '<img src="../images/champion/' + cleanedValue + '.png" class="me-2" alt="' + d.value + '" width="30" height="30">' + d.value;
+                } else if (d.column === 2 || d.column === 3 ) {
+                    return d.value;
+                } else if (d.column === 4 || d.column === 5) {
+                    return d.value+" %";
+                }
+                else {
+                    return d.value;
+                }
+            });
+    });
 }
 
+function updateSort(){
+    d3.selectAll("#champions-table .hoverable").on("click", function () {
+        var rank = d3.select("#dropdownSelect").text().replace(/(\r\n|\n|\r|\s)/gm, "").toLowerCase();
+        var position = d3.select(".nav-link.active").text().replace(/(\r\n|\n|\r|\s)/gm, "").toUpperCase();
+        if (d3.select(this).attr("id") === "tier-th") {
+            if (nowSort === "tier") {
+                nowOrder = nowOrder === "desc" ? "asc" : "desc";
+            } else {
+                nowOrder = "desc";
+            }
+            nowSort = "tier";
+            displayAllInfo(position, rank, "tier", nowOrder);
+            d3.selectAll(".nowSort").classed("nowSort", false);
+            d3.select(this).classed("nowSort", true);
+    
+            console.log(nowOrder)
+        } else if (d3.select(this).attr("id") === "wr-th") {
+            if (nowSort === "winRate") {
+                nowOrder = nowOrder === "desc" ? "asc" : "desc";
+            } else {
+                nowOrder = "desc";
+            }
+            nowSort = "winRate";
+            displayAllInfo(position, rank, "winRate", nowOrder);
+            d3.selectAll(".nowSort").classed("nowSort", false);
+            d3.select(this).classed("nowSort", true);
+            console.log(nowOrder)
+        } else if (d3.select(this).attr("id") === "pr-th") {
+            if (nowSort === "pickRate") {
+                nowOrder = nowOrder === "desc" ? "asc" : "desc";
+            } else {
+                nowOrder = "desc";
+            }
+            nowSort = "pickRate";
+            displayAllInfo(position, rank, "pickRate", nowOrder);
+            d3.selectAll(".nowSort").classed("nowSort", false);
+            d3.select(this).classed("nowSort", true);
+        } else if (d3.select(this).attr("id") === "br-th") {
+            if (nowSort === "banRate") {
+                nowOrder = nowOrder === "desc" ? "asc" : "desc";
+            } else {
+                nowOrder = "desc";
+            }
+            nowSort = "banRate";
+            displayAllInfo(position, rank, "banRate", nowOrder);
+            d3.selectAll(".nowSort").classed("nowSort", false);
+            d3.select(this).classed("nowSort", true);
+        } else if (d3.select(this).attr("id") === "df-th") {
+            if (nowSort === "difficulty") {
+                nowOrder = nowOrder === "desc" ? "asc" : "desc";
+            } else {
+                nowOrder = "desc";
+            }
+            nowSort = "difficulty";
+            displayAllInfo(position, rank, "difficulty", nowOrder);
+            d3.selectAll(".nowSort").classed("nowSort", false);
+            d3.select(this).classed("nowSort", true);
+        }else if (d3.select(this).attr("id") === "w-th") { //win num for counter pick
+            if (nowSort === "win") {
+                nowOrder = nowOrder === "desc" ? "asc" : "desc";
+            } else {
+                nowOrder = "desc";
+            }
+            nowSort = "win";
+            displayAllInfo(position, rank, "win", nowOrder);
+            d3.selectAll(".nowSort").classed("nowSort", false);
+            d3.select(this).classed("nowSort", true);
+        }else if (d3.select(this).attr("id") === "p-th") { //pick num for counter pick
+            if (nowSort === "pick") {
+                nowOrder = nowOrder === "desc" ? "asc" : "desc";
+            } else {
+                nowOrder = "desc";
+            }
+            nowSort = "pick";
+            displayAllInfo(position, rank, "pick", nowOrder);
+            d3.selectAll(".nowSort").classed("nowSort", false);
+            d3.select(this).classed("nowSort", true);
+        }
+    });
+}
+
+function displayAllInfo(position, rank, sortWith, sortOrder) {
+    if (nowMode == "OPPICK") {
+        updateTableHeaders(nowMode);
+        updateSort();
+        displayChampions(position, rank, sortWith, sortOrder);
+        displayBubbleChart(position, rank, sortWith, sortOrder);
+    }else if (nowMode == "COUNTERPICK") {
+        updateTableHeaders(nowMode);
+        updateSort();
+        displaySummonerChampions("Faker",position, rank, sortWith, sortOrder);
+        // displayChampions(position, rank, sortWith, sortOrder);
+        // displayBubbleChart(position, rank, sortWith, sortOrder);
+    }
+}
+
+function updateTableHeaders(mode) {
+    var tableHead = document.querySelector("#champions-table thead tr");
+    tableHead.innerHTML = ''; // 清空现有的表头
+
+    if (mode === "OPPICK") {
+        // mode为1时的表头
+        tableHead.innerHTML += `
+            <th scope="col">#</th>
+            <th scope="col">Champion</th>
+            <th scope="col" class="hoverable" id="tier-th">Tier</th>
+            <th scope="col">Position</th>
+            <th scope="col" class="hoverable" id="wr-th">Win Rate</th>
+            <th scope="col" class="hoverable" id="pr-th">Pick Rate</th>
+            <th scope="col" class="hoverable" id="br-th">Ban Rate</th>
+            <th scope="col" class="hoverable" id="df-th">Difficulty</th>
+        `;
+        // 根据需要继续添加其他表头
+    } else {
+        tableHead.innerHTML += `
+            <th scope="col">#</th>
+            <th scope="col">Champion</th>
+            <th scope="col" class="hoverable" id="w-th">Win</th>
+            <th scope="col" class="hoverable" id="p-th">Pick</th>
+            <th scope="col" class="hoverable" id="wr-th">Win Rate</th>
+            <th scope="col" class="hoverable" id="pr-th">Pick Rate</th>
+        `;
+    }
+}
+
+updateTableHeaders(nowMode);
+updateSort();
 displayAllInfo("ALL", "all", "tier", "desc");
