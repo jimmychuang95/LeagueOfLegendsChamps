@@ -2,6 +2,7 @@ var nowSort = "tier";
 var nowOrder = "desc";
 var nowMode = "OPPICK"
 var position = "ALL";
+var opponentPick = "total";
 
 var difficultyOrder = {
     "Severe": 1,
@@ -15,6 +16,7 @@ function getKeyByValue(object, value) {
 }
 
 d3.selectAll(".dropdown-item").on("click", function () {
+    opponentPick = "total";
     var rank = d3.select(this).text().replace(/(\r\n|\n|\r|\s)/gm, "");
     var dropdown = d3.select("#dropdownSelect");
     dropdown.html(""); // 清空內容
@@ -32,12 +34,14 @@ d3.selectAll(".dropdown-item").on("click", function () {
 });
 
 d3.selectAll("#positionTab .nav-item").on("click", function () {
+    opponentPick = "total"; //refresh
     var rank = d3.select("#dropdownSelect").text().replace(/(\r\n|\n|\r|\s)/gm, "").toLowerCase();
     position = d3.select(this).text().replace(/(\r\n|\n|\r|\s)/gm, "").toUpperCase();
     displayAllInfo(position, rank, nowSort, nowOrder);
 });
 
 d3.selectAll("#modeTab .nav-item").on("click", function () {
+    opponentPick = "total"; //refresh
     var rank = d3.select("#dropdownSelect").text().replace(/(\r\n|\n|\r|\s)/gm, "").toLowerCase();
     nowMode = d3.select(this).text().replace(/(\r\n|\n|\r|\s)/gm, "").toUpperCase();
     displayAllInfo(position, rank, nowSort, nowOrder);
@@ -411,10 +415,10 @@ function displaySummonerChampions(summonerName, position, rank, sortWith, sortOr
         positionTalbe = "top_champion_win_pick";
     }else if (position === "JUNGLE") {
         positionTalbe = "jungle_champion_win_pick";
-    }else if (position === "MIDDLE") {
+    }else if (position === "MIDDLE" || position === "MID") {
         position = "MID";
         positionTalbe = "mid_champion_win_pick";
-    }else if (position === "BOTTOM") {
+    }else if (position === "BOTTOM" || position === "ADC") {
         position = "ADC";
         positionTalbe = "adc_champion_win_pick";
     }else if (position === "SUPPORT") {
@@ -429,15 +433,16 @@ function displaySummonerChampions(summonerName, position, rank, sortWith, sortOr
     ]).then(function (files) {
         var data = files[0];
         var data = data.map(function(row) {
-            row["total"] = JSON.parse(row["total"]);
+// HERE:
+            row[opponentPick] = JSON.parse(row[opponentPick]);
             return {
                 col1: String(""),
                 col: String(""),
                 name: String(row[""]),
-                win:  String(row["total"][0]),
-                pick: String(row["total"][1]),
-                winRate: String(row["total"][2]),
-                pickRate: String(row["total"][3])
+                win:  String(row[opponentPick][0]),
+                pick: String(row[opponentPick][1]),
+                winRate: String(row[opponentPick][2]),
+                pickRate: String(row[opponentPick][3])
             };
         });
         if (sortWith === "winRate") {
@@ -477,9 +482,9 @@ function displaySummonerChampions(summonerName, position, rank, sortWith, sortOr
             .data(data)
             .enter()
             .append("tr")
-            .on("click", function (event, d) {
-                window.open("champion.html?name=" + encodeURIComponent(d.name) + "&tier=" + encodeURIComponent(d.tier) + "&rank=" + encodeURIComponent(rank), "_self");
-            });
+            // .on("click", function (event, d) {
+            //     window.open("champion.html?name=" + encodeURIComponent(d.name) + "&tier=" + encodeURIComponent(d.tier) + "&rank=" + encodeURIComponent(rank), "_self");
+            // });
 
         var cells = rows.selectAll("td")
             .data(function (row, i) {
@@ -601,6 +606,7 @@ function displayAllInfo(position, rank, sortWith, sortOrder) {
     }else if (nowMode == "COUNTERPICK") {
         updateTableHeaders(nowMode);
         updateSort();
+        displaySummonerBubbleChart("Faker",position, rank, sortWith, sortOrder);
         displaySummonerChampions("Faker",position, rank, sortWith, sortOrder);
         // displayChampions(position, rank, sortWith, sortOrder);
         // displayBubbleChart(position, rank, sortWith, sortOrder);
@@ -636,6 +642,233 @@ function updateTableHeaders(mode) {
     }
 }
 
+
+
+//WORKING_AREA
+function displaySummonerBubbleChart(summonerName, position, rank, sortWith, sortOrder) {
+    d3.select("#bubble-chart-container").html("");
+
+    if (position === "TOP") {
+        positionTalbe = "top_champion_win_pick";
+    }else if (position === "JUNGLE") {
+        positionTalbe = "jungle_champion_win_pick";
+    }else if (position === "MIDDLE" || position === "MID") {
+        position = "MID";
+        positionTalbe = "mid_champion_win_pick";
+    }else if (position === "BOTTOM" || position === "ADC") {
+        position = "ADC";
+        positionTalbe = "adc_champion_win_pick";
+    }else if (position === "SUPPORT") {
+        positionTalbe = "support_champion_win_pick";
+    }else{
+        positionTalbe = "top_champion_win_pick";
+        //TODO: positionTalbe = "all_champion_win_pick";
+    }
+
+    Promise.all([
+        d3.csv("../data/champions/" + rank + ".csv"),
+        d3.csv("../data/summoner/" + summonerName +"/summoner_win_pick/"+positionTalbe+".csv")
+    ]).then(function (files) {
+        var data = files[0];
+        var summonerData = files[1];
+        var columnsName = summonerData.columns;
+        var opponentChampions = columnsName.filter(e => e !== "" && e !== "total");
+        var data = data.filter(function(row) {
+            return opponentChampions.includes(row.name.toLowerCase());
+        });
+
+
+
+
+        if (position !== "ALL") {
+            if (position === "MIDDLE") {
+                position = "MID";
+            } else if (position === "BOTTOM") {
+                position = "ADC";
+            }
+
+            data = data.filter(function (d) {
+                return d.position === position;
+            });
+        }
+
+        var width = d3.select("#bubble-chart-container").node().getBoundingClientRect().width;
+        var height = width;
+        var minRadius, maxRadius;
+
+        switch (sortWith) {
+            case "tier":
+                minRadius = 5;
+                maxRadius = 35;
+                break;
+            case "winRate":
+                minRadius = 10;
+                maxRadius = 20;
+                break;
+            case "pickRate":
+                minRadius = 10;
+                maxRadius = 35;
+                break;
+            case "banRate":
+                minRadius = 10;
+                maxRadius = 45;
+                break;
+            case "difficulty":
+                minRadius = 10;
+                maxRadius = 25;
+                break;
+            default:
+                minRadius = 5;
+                maxRadius = 35;
+                break;
+        }
+
+        if (position != "ALL") {
+            minRadius = minRadius * 1.4;
+            maxRadius = maxRadius * 1.4;
+        }
+
+        if ((sortWith == "pickRate" || sortWith == "banRate" || sortWith == "tier") && (sortOrder == "asc")) {
+            minRadius = 5
+            maxRadius = 20
+        }
+
+        const tooltip = d3.select(".tooltip");
+
+        const radiusScale = d3.scalePow()
+            .exponent(0.68) // Controls the curvature of the scale
+            .domain(sortOrder == "desc" ?
+                (sortWith == "tier" || sortWith == "difficulty") ? [d3.max(data, d => d[sortWith]), d3.min(data, d => d[sortWith])] : [d3.min(data, d => d[sortWith]), d3.max(data, d => d[sortWith])] :
+                (sortWith == "tier" || sortWith == "difficulty") ? [d3.min(data, d => d[sortWith]), d3.max(data, d => d[sortWith])] : [d3.max(data, d => d[sortWith]), d3.min(data, d => d[sortWith])]
+            )
+            .range([minRadius, maxRadius]);
+
+        const svg = d3.select("#bubble-chart-container").append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("id", "bubble-chart-svg");
+
+        const defs = svg.append('defs');
+        data.forEach((d, i) => {
+            var cleannedName = d.name.replace(/[\s.'"]/g, "");
+            switch (cleannedName) {
+                case ("RenataGlasc"): cleannedName = "Renata"; break;
+                case ("Nunu&Willump"): cleannedName = "Nunu"; break;
+                case ("Wukong"): cleannedName = "MonkeyKing"; break;
+            }
+
+            defs.append('pattern')
+                .attr('id', 'hero-image-' + cleannedName + '-' + i)
+                .attr('patternUnits', 'objectBoundingBox')
+                .attr('width', 1)
+                .attr('height', 1)
+                .append('image')
+                .attr('xlink:href', '../images/champion/' + cleannedName + '.png')
+                .attr('width', radiusScale(d[sortWith]) * 2)
+                .attr('height', radiusScale(d[sortWith]) * 2)
+                .attr('preserveAspectRatio', 'xMidYMid slice');
+        });
+
+        const simulation = d3.forceSimulation(data)
+            .force("charge", d3.forceManyBody().strength(20 / Math.sqrt(data.length)))
+            .force("center", d3.forceCenter(width / 2, height / 2))
+            .force("collision", d3.forceCollide().radius(d => radiusScale(d[sortWith])))
+            .on("tick", ticked);
+
+        simulation.on("tick", () => {
+            ticked();
+            boundingBoxForce();
+        });
+
+        function ticked() {
+            const minShowRadius = 7;
+            const bubbles = svg.selectAll(".bubble")
+                .data(data)
+                .join("circle")
+                .attr("class", "bubble")
+                .attr("r", d => radiusScale(d[sortWith]))
+                .attr("cx", d => {
+                    const radius = radiusScale(d[sortWith]);
+                    return Math.max(radius, Math.min(width - radius, d.x));
+                })
+                .attr("cy", d => {
+                    const radius = radiusScale(d[sortWith]);
+                    return Math.max(radius, Math.min(height - radius, d.y));
+                })
+                .style("fill", function (d, i) {
+                    var cleannedName = d.name.replace(/[\s.'"]/g, "");
+                    switch (cleannedName) {
+                        case ("RenataGlasc"): cleannedName = "Renata"; break;
+                        case ("Nunu&Willump"): cleannedName = "Nunu"; break;
+                        case ("Wukong"): cleannedName = "MonkeyKing"; break;
+                    }
+
+                    return "url(#hero-image-" + cleannedName + "-" + i + ")";
+                })
+                .style("display", d => (position == "ALL" && radiusScale(d[sortWith]) < minShowRadius) ? "none" : "block")
+                .on("mouseover", (event, d) => {
+                    tooltip.style("opacity", 1)
+                        .html(d.name + "<br>" + sortWith + ": " + (sortWith == "difficulty" ? getKeyByValue(difficultyOrder, d[sortWith]) : d[sortWith].toLocaleString()) + (sortWith == "tier" || sortWith == "difficulty" ? "" : "%"))
+                        .style("left", (event.pageX) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", () => tooltip.style("opacity", 0))
+                .on("click", function (event, d) {
+                    opponentPick = d.name.toLowerCase();
+                    console.log(nowMode);
+                    console.log(position);
+// HERE:    
+                    displaySummonerChampions(summonerName, position, rank, "win", "desc");
+                    updateSort();
+                    // opponentPick= "total";
+                })
+                .call(d3.drag()
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+        }
+
+
+        function dragstarted(event) {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            event.subject.fx = event.subject.x;
+            event.subject.fy = event.subject.y;
+        }
+
+        function dragged(event) {
+            simulation.alphaTarget(0.1).restart();
+            // Calculate the bubble's radius for the current data point
+            const radius = radiusScale(event.subject[sortWith]);
+
+            // Keep the dragged position within the bounds, accounting for the radius to prevent overlap with the border
+            const newX = Math.max(radius, Math.min(width - radius, event.x));
+            const newY = Math.max(radius, Math.min(height - radius, event.y));
+
+            // Update the position for the current data point
+            event.subject.fx = newX;
+            event.subject.fy = newY;
+
+            tooltip.style("opacity", 0);
+        }
+
+        function dragended(event) {
+            if (!event.active) simulation.alphaTarget(0);
+            event.subject.fx = null;
+            event.subject.fy = null;
+        }
+
+        function boundingBoxForce() {
+            for (let node of simulation.nodes()) {
+                node.x = Math.max(radiusScale(node[sortWith]), Math.min(width - radiusScale(node[sortWith]), node.x));
+                node.y = Math.max(radiusScale(node[sortWith]), Math.min(height - radiusScale(node[sortWith]), node.y));
+            }
+        }
+
+    });
+}
 updateTableHeaders(nowMode);
 updateSort();
 displayAllInfo("ALL", "all", "tier", "desc");
+
+
+//NOTE:  opponentPick = "total" 要設回去 when 1. change mode 2. change position 
