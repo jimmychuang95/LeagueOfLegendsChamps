@@ -705,20 +705,20 @@ function displaySummonerBubbleChart(summonerName, position, rank, sortWith, sort
 
         switch (sortWith) {
             case "win":
-                minRadius = 5;
+                minRadius = 0;
                 maxRadius = 35;
                 break;
             case "winRate":
-                minRadius = 10;
-                maxRadius = 20;
+                minRadius = 0;
+                maxRadius = 35;
                 break;
             case "pickRate":
-                minRadius = 10;
+                minRadius = 5;
                 maxRadius = 35;
                 break;
             case "pick":
-                minRadius = 10;
-                maxRadius = 45;
+                minRadius = 5;
+                maxRadius = 35;
                 break;
             default:
                 minRadius = 5;
@@ -726,15 +726,6 @@ function displaySummonerBubbleChart(summonerName, position, rank, sortWith, sort
                 break;
         }
 
-        if (position != "ALL") {
-            minRadius = minRadius * 1.4;
-            maxRadius = maxRadius * 1.4;
-        }
-
-        if ((sortWith == "pickRate" || sortWith == "pick" || sortWith == "win") && (sortOrder == "asc")) {
-            minRadius = 5
-            maxRadius = 20
-        }
 
         const tooltip = d3.select(".tooltip");
 
