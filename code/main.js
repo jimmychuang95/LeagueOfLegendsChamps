@@ -3,7 +3,7 @@ var nowOrder = "desc";
 var nowMode = "OPPICK"
 var position = "ALL";
 var opponentPick = "total";
-
+var summonerName = "Faker"; //Zeus, Owner, Faker, Gumayusi, Keria
 var difficultyOrder = {
     "Severe": 1,
     "Hard": 2,
@@ -606,8 +606,8 @@ function displayAllInfo(position, rank, sortWith, sortOrder) {
     }else if (nowMode == "COUNTERPICK") {
         updateTableHeaders(nowMode);
         updateSort();
-        displaySummonerBubbleChart("Faker",position, rank, sortWith, sortOrder);
-        displaySummonerChampions("Faker",position, rank, sortWith, sortOrder);
+        displaySummonerBubbleChart(summonerName,position, rank, sortWith, sortOrder);
+        displaySummonerChampions(summonerName,position, rank, sortWith, sortOrder);
         // displayChampions(position, rank, sortWith, sortOrder);
         // displayBubbleChart(position, rank, sortWith, sortOrder);
     }
