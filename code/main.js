@@ -646,6 +646,13 @@ function updateTableHeaders(mode) {
 
 //WORKING_AREA
 function displaySummonerBubbleChart(summonerName, position, rank, sortWith, sortOrder) {
+
+    if (sortWith === "win") {
+        sortWith = "winRate";
+    }else if (sortWith === "pick") {
+        sortWith = "pickRate";
+    }
+
     d3.select("#bubble-chart-container").html("");
 
     if (position === "TOP") {
@@ -697,7 +704,7 @@ function displaySummonerBubbleChart(summonerName, position, rank, sortWith, sort
         var minRadius, maxRadius;
 
         switch (sortWith) {
-            case "tier":
+            case "win":
                 minRadius = 5;
                 maxRadius = 35;
                 break;
@@ -709,13 +716,9 @@ function displaySummonerBubbleChart(summonerName, position, rank, sortWith, sort
                 minRadius = 10;
                 maxRadius = 35;
                 break;
-            case "banRate":
+            case "pick":
                 minRadius = 10;
                 maxRadius = 45;
-                break;
-            case "difficulty":
-                minRadius = 10;
-                maxRadius = 25;
                 break;
             default:
                 minRadius = 5;
@@ -728,7 +731,7 @@ function displaySummonerBubbleChart(summonerName, position, rank, sortWith, sort
             maxRadius = maxRadius * 1.4;
         }
 
-        if ((sortWith == "pickRate" || sortWith == "banRate" || sortWith == "tier") && (sortOrder == "asc")) {
+        if ((sortWith == "pickRate" || sortWith == "pick" || sortWith == "win") && (sortOrder == "asc")) {
             minRadius = 5
             maxRadius = 20
         }
