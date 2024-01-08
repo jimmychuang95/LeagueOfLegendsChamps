@@ -1,6 +1,6 @@
 var nowSort = "tier";
 var nowOrder = "desc";
-var nowMode = "OPPICK"
+var nowMode = "ALL-PLAYERDATA"
 var position = "ALL";
 var opponentPick = "total";
 var summonerName = "Faker"; //Zeus, Owner, Faker, Gumayusi, Keria
@@ -598,12 +598,12 @@ function updateSort(){
 }
 
 function displayAllInfo(position, rank, sortWith, sortOrder) {
-    if (nowMode == "OPPICK") {
+    if (nowMode == "ALL-PLAYERDATA") {
         updateTableHeaders(nowMode);
         updateSort();
         displayChampions(position, rank, sortWith, sortOrder);
         displayBubbleChart(position, rank, sortWith, sortOrder);
-    }else if (nowMode == "COUNTERPICK") {
+    }else if (nowMode == "PLAYERHISTORICALDATA") {
         updateTableHeaders(nowMode);
         updateSort();
         displaySummonerBubbleChart(summonerName,position, rank, sortWith, sortOrder);
@@ -617,7 +617,7 @@ function updateTableHeaders(mode) {
     var tableHead = document.querySelector("#champions-table thead tr");
     tableHead.innerHTML = ''; // 清空现有的表头
 
-    if (mode === "OPPICK") {
+    if (mode === "ALL-PLAYERDATA") {
         // mode为1时的表头
         tableHead.innerHTML += `
             <th scope="col">#</th>
